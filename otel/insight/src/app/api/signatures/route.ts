@@ -14,6 +14,7 @@ export async function GET(request: Request) {
             timestamp, 
             trace_id, 
             span_id, 
+            parent_span_id,
             duration_ms 
           FROM error_occurrences 
           WHERE signature_id = {sig_id: String}
@@ -23,8 +24,50 @@ export async function GET(request: Request) {
         query_params: { sig_id: signatureId },
         format: 'JSONEachRow',
       });
-      const occurrences = await resultSet.json();
-      return NextResponse.json({ occurrences });
+      const occurrences = await resultSet.json() as any[];
+
+      if (occurrences.length === 0) {
+        return NextResponse.json({ occurrences: [] });
+      }
+
+      // Fetch all error spans for these trace IDs to compute root cause
+      const traceIds = Array.from(new Set(occurrences.map(o => o.trace_id)));
+      const allSpansSet = await clickhouse.query({
+        query: `
+          SELECT 
+            trace_id, 
+            span_id, 
+            parent_span_id 
+          FROM error_occurrences 
+          WHERE trace_id IN ({t_ids: Array(String)})
+        `,
+        query_params: { t_ids: traceIds },
+        format: 'JSONEachRow',
+      });
+      const allSpans = await allSpansSet.json() as any[];
+
+      // Create a set of trace_id:parent_span_id to check if a span acts as a parent of any error span
+      const parentSpanIdsSet = new Set<string>();
+      for (const span of allSpans) {
+        if (span.parent_span_id) {
+          parentSpanIdsSet.add(`${span.trace_id}:${span.parent_span_id}`);
+        }
+      }
+
+      // Process occurrences and compute is_root_cause
+      const processedOccurrences = occurrences.map(occ => {
+        const key = `${occ.trace_id}:${occ.span_id}`;
+        const hasChildError = parentSpanIdsSet.has(key);
+        return {
+          timestamp: occ.timestamp,
+          trace_id: occ.trace_id,
+          span_id: occ.span_id,
+          duration_ms: occ.duration_ms,
+          is_root_cause: !hasChildError
+        };
+      });
+
+      return NextResponse.json({ occurrences: processedOccurrences });
     }
 
     // 2. Overview: Query aggregated stats, signatures, and 24h timeline

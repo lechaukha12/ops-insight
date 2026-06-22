@@ -95,6 +95,7 @@ function parseOtlpJson(body: any): ErrorSpan[] {
             timestamp,
             trace_id: span.traceId,
             span_id: span.spanId,
+            parent_span_id: span.parentSpanId || '',
             service_name: serviceName,
             endpoint_api: span.name || 'unknown-operation',
             error_message: errorMessage,

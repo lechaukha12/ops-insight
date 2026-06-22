@@ -61,6 +61,7 @@ export async function initDatabase() {
           signature_id String,
           trace_id String,
           span_id String,
+          parent_span_id String,
           service_name String,
           endpoint_api String,
           error_message String,

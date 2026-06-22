@@ -5,6 +5,7 @@ export interface ErrorSpan {
   timestamp: Date;
   trace_id: string;
   span_id: string;
+  parent_span_id: string;
   service_name: string;
   endpoint_api: string;
   error_message: string;
@@ -175,6 +176,7 @@ class TraceAggregator {
             .digest('hex'),
           trace_id: o.trace_id,
           span_id: o.span_id,
+          parent_span_id: o.parent_span_id || '',
           service_name: o.service_name,
           endpoint_api: o.endpoint_api,
           error_message: o.error_message,

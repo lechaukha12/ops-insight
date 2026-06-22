@@ -26,6 +26,7 @@ interface Occurrence {
   trace_id: string;
   span_id: string;
   duration_ms: number;
+  is_root_cause?: boolean;
 }
 
 interface TimelinePoint {
@@ -547,7 +548,12 @@ export default function Dashboard() {
                 {occurrences.map((occ, idx) => (
                   <div key={idx} className="occurrence-item">
                     <div>
-                      <div className="occ-time">{formatDate(occ.timestamp)}</div>
+                      <div className="occ-time" style={{ display: 'flex', alignItems: 'center' }}>
+                        {formatDate(occ.timestamp)}
+                        {occ.is_root_cause && (
+                          <span className="root-cause-badge">Root Cause</span>
+                        )}
+                      </div>
                       <div className="occ-trace-id">
                         <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginRight: '4px', fontWeight: 'normal' }}>Trace ID:</span>
                         {occ.trace_id.slice(0, 16)}...
