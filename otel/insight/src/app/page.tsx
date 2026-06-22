@@ -48,6 +48,16 @@ export default function Dashboard() {
   const [selectedService, setSelectedService] = useState('');
   const [sortBy, setSortBy] = useState<'last_seen' | 'first_seen' | 'count'>('last_seen');
 
+  // Pagination states
+  const [loadedCount, setLoadedCount] = useState(10);
+  const [copiedTraceId, setCopiedTraceId] = useState<string | null>(null);
+
+  // Trace details viewer states
+  const [selectedTraceId, setSelectedTraceId] = useState<string | null>(null);
+  const [traceSpans, setTraceSpans] = useState<any[]>([]);
+  const [loadingTrace, setLoadingTrace] = useState(false);
+  const [selectedTraceSpan, setSelectedTraceSpan] = useState<any | null>(null);
+
   // Chart tooltip state
   const [hoveredPoint, setHoveredPoint] = useState<{ x: number; y: number; time: string; count: number } | null>(null);
 
@@ -57,7 +67,7 @@ export default function Dashboard() {
   // Fetch summary data
   const fetchData = useCallback(async () => {
     try {
-      const res = await fetch('/api/signatures');
+      const res = await fetch(`/api/signatures?limit=${loadedCount}`);
       if (!res.ok) throw new Error('Failed to fetch data');
       const data = await res.json();
       
@@ -69,7 +79,7 @@ export default function Dashboard() {
     } finally {
       setLoading(false);
     }
-  }, []); // No dependencies - reference never changes!
+  }, [loadedCount]);
 
   // Fetch occurrences when a signature is clicked
   const fetchOccurrences = async (sigId: string) => {
@@ -84,6 +94,85 @@ export default function Dashboard() {
     } finally {
       setLoadingOccurrences(false);
     }
+  };
+
+  const handleCopyTraceId = (e: React.MouseEvent, traceId: string) => {
+    e.stopPropagation();
+    navigator.clipboard.writeText(traceId);
+    setCopiedTraceId(traceId);
+    setTimeout(() => setCopiedTraceId(null), 2000);
+  };
+
+  const handleViewTraceDetails = async (traceId: string) => {
+    setSelectedTraceId(traceId);
+    setLoadingTrace(true);
+    setTraceSpans([]);
+    setSelectedTraceSpan(null);
+    try {
+      const res = await fetch(`/api/traces?trace_id=${traceId}`);
+      if (!res.ok) throw new Error('Failed to fetch trace details');
+      const data = await res.json();
+      setTraceSpans(data.spans || []);
+      
+      // Auto-select the root cause span by default to show its exception message
+      const rootCause = data.spans?.find((s: any) => s.is_root_cause);
+      if (rootCause) {
+        setSelectedTraceSpan(rootCause);
+      } else if (data.spans?.length > 0) {
+        setSelectedTraceSpan(data.spans[0]);
+      }
+    } catch (err) {
+      console.error('Error fetching trace details:', err);
+    } finally {
+      setLoadingTrace(false);
+    }
+  };
+
+  const buildTraceTree = (spans: any[]) => {
+    const spanMap = new Map<string, any>();
+    const roots: any[] = [];
+
+    // Initialize map
+    for (const span of spans) {
+      spanMap.set(span.span_id, { ...span, children: [] });
+    }
+
+    // Connect parents and children
+    for (const item of spanMap.values()) {
+      if (item.parent_span_id && spanMap.has(item.parent_span_id)) {
+        spanMap.get(item.parent_span_id).children.push(item);
+      } else {
+        roots.push(item);
+      }
+    }
+
+    return roots;
+  };
+
+  const renderTraceTree = (nodes: any[], depth = 0) => {
+    return nodes.map((node) => (
+      <div key={node.span_id} className="tree-node-wrapper" style={{ marginLeft: depth > 0 ? `${depth * 16}px` : '0px' }}>
+        <div 
+          className={`tree-node ${selectedTraceSpan?.span_id === node.span_id ? 'active' : ''}`}
+          onClick={() => setSelectedTraceSpan(node)}
+        >
+          <div className="tree-node-line-wrapper">
+            {depth > 0 && <span className="tree-branch-line"></span>}
+            <span className={`tree-service-tag ${node.is_root_cause ? 'root-cause' : ''}`}>
+              {node.service_name}
+            </span>
+            <span className="tree-endpoint-name" title={node.endpoint_api}>{node.endpoint_api}</span>
+            <span className="tree-duration-badge">{node.duration_ms.toFixed(1)} ms</span>
+            {node.is_root_cause && (
+              <span className="root-cause-badge" style={{ margin: 0, fontSize: '0.55rem', padding: '0.1rem 0.3rem', height: 'fit-content' }}>
+                Root Cause
+              </span>
+            )}
+          </div>
+        </div>
+        {node.children && node.children.length > 0 && renderTraceTree(node.children, depth + 1)}
+      </div>
+    ));
   };
 
   // Poll data every 5 seconds
@@ -168,16 +257,22 @@ export default function Dashboard() {
     const otherSigs = sortedSigs.slice(4);
 
     const chartColors = ['#06b6d4', '#f43f5e', '#a5b4fc', '#f59e0b'];
-    const chartData = topSigs.map((s, idx) => ({
-      label: `${s.service_name} (${s.endpoint_api})`,
-      count: Number(s.count),
-      color: chartColors[idx % chartColors.length],
-    }));
+    const chartData = topSigs.map((s, idx) => {
+      const service = s.service_name;
+      const api = s.endpoint_api.length > 25 ? `${s.endpoint_api.slice(0, 25)}...` : s.endpoint_api;
+      return {
+        label: `${service} (${api})`,
+        fullLabel: `${s.service_name} (${s.endpoint_api})`,
+        count: Number(s.count),
+        color: chartColors[idx % chartColors.length],
+      };
+    });
 
     if (otherSigs.length > 0) {
       const otherCount = otherSigs.reduce((sum, s) => sum + Number(s.count), 0);
       chartData.push({
         label: 'Others',
+        fullLabel: 'Other error patterns combined',
         count: otherCount,
         color: '#6b7280',
       });
@@ -207,6 +302,7 @@ export default function Dashboard() {
         pathData,
         color: d.color,
         label: d.label,
+        fullLabel: d.fullLabel,
         percentage: (percentage * 100).toFixed(1),
         count: d.count,
       };
@@ -225,17 +321,35 @@ export default function Dashboard() {
                 strokeWidth="2.5"
                 className="pie-slice"
               >
-                <title>{`${slice.label}: ${slice.count} errors (${slice.percentage}%)`}</title>
+                <title>{`${slice.fullLabel}: ${slice.count} errors (${slice.percentage}%)`}</title>
               </path>
             ))}
             <circle cx={cx} cy={cy} r="45" fill="var(--bg-color)" />
+            <text 
+              x={cx} 
+              y={cy - 4} 
+              textAnchor="middle" 
+              alignmentBaseline="middle" 
+              style={{ fill: 'var(--text-primary)', fontSize: '18px', fontWeight: 800, fontFamily: 'var(--font-family)' }}
+            >
+              {stats.totalSignatures}
+            </text>
+            <text 
+              x={cx} 
+              y={cy + 14} 
+              textAnchor="middle" 
+              alignmentBaseline="middle" 
+              style={{ fill: 'var(--text-secondary)', fontSize: '9px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}
+            >
+              Patterns
+            </text>
           </svg>
         </div>
         <div className="pie-chart-legend">
           {slices.map((slice, idx) => (
             <div key={idx} className="legend-item">
               <span className="legend-color-dot" style={{ backgroundColor: slice.color }}></span>
-              <span className="legend-label" title={slice.label}>{slice.label}</span>
+              <span className="legend-label" title={slice.fullLabel}>{slice.label}</span>
               <span className="legend-percentage">{slice.percentage}%</span>
             </div>
           ))}
@@ -491,26 +605,39 @@ export default function Dashboard() {
           {filteredSignatures.length === 0 ? (
             <div className="empty-state">No matching error signatures found.</div>
           ) : (
-            <div className="signatures-list">
-              {filteredSignatures.map((sig) => (
-                <div
-                  key={sig.signature_id}
-                  className={`signature-row ${selectedSignatureId === sig.signature_id ? 'active' : ''}`}
-                  onClick={() => handleSignatureClick(sig)}
-                >
-                  <div className="sig-meta">
-                    <span className="sig-service-badge">{sig.service_name}</span>
-                    <span className="sig-count-badge">× {sig.count}</span>
+            <>
+              <div className="signatures-list">
+                {filteredSignatures.map((sig) => (
+                  <div
+                    key={sig.signature_id}
+                    className={`signature-row ${selectedSignatureId === sig.signature_id ? 'active' : ''}`}
+                    onClick={() => handleSignatureClick(sig)}
+                  >
+                    <div className="sig-meta">
+                      <span className="sig-service-badge">{sig.service_name}</span>
+                      <span className="sig-count-badge">× {sig.count}</span>
+                    </div>
+                    <div className="sig-endpoint">{sig.endpoint_api}</div>
+                    <div className="sig-error-msg">{sig.error_message}</div>
+                    <div className="sig-timestamps">
+                      <span>First: {formatDate(sig.first_seen)}</span>
+                      <span>Last: {formatDate(sig.last_seen)}</span>
+                    </div>
                   </div>
-                  <div className="sig-endpoint">{sig.endpoint_api}</div>
-                  <div className="sig-error-msg">{sig.error_message}</div>
-                  <div className="sig-timestamps">
-                    <span>First: {formatDate(sig.first_seen)}</span>
-                    <span>Last: {formatDate(sig.last_seen)}</span>
-                  </div>
+                ))}
+              </div>
+              {signatures.length < stats.totalSignatures && (
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1.5rem' }}>
+                  <button 
+                    onClick={() => setLoadedCount(prev => prev + 10)}
+                    className="refresh-button"
+                    style={{ width: '100%', justifyContent: 'center', padding: '0.75rem', fontWeight: 600 }}
+                  >
+                    Load More Signatures ({stats.totalSignatures - signatures.length} remaining)
+                  </button>
                 </div>
-              ))}
-            </div>
+              )}
+            </>
           )}
         </div>
 
@@ -547,29 +674,42 @@ export default function Dashboard() {
               <div style={{ maxHeight: '500px', overflowY: 'auto', paddingRight: '0.25rem' }}>
                 {occurrences.map((occ, idx) => (
                   <div key={idx} className="occurrence-item">
-                    <div>
-                      <div className="occ-time" style={{ display: 'flex', alignItems: 'center' }}>
+                    <div style={{ flex: 1, minWidth: 0, marginRight: '1rem' }}>
+                      <div className="occ-time" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
                         {formatDate(occ.timestamp)}
                         {occ.is_root_cause && (
-                          <span className="root-cause-badge">Root Cause</span>
+                          <span className="root-cause-badge" style={{ marginLeft: 0 }}>Root Cause</span>
                         )}
                       </div>
-                      <div className="occ-trace-id">
-                        <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', marginRight: '4px', fontWeight: 'normal' }}>Trace ID:</span>
-                        {occ.trace_id.slice(0, 16)}...
+                      <div className="occ-trace-id" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', marginTop: '0.35rem', flexWrap: 'wrap' }}>
+                        <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem', fontWeight: 'normal', whiteSpace: 'nowrap' }}>Trace ID:</span>
+                        <span style={{ fontFamily: 'monospace', fontSize: '0.8rem', color: 'var(--accent-color)', wordBreak: 'break-all' }}>{occ.trace_id}</span>
+                        <button
+                          className="copy-btn"
+                          onClick={(e) => handleCopyTraceId(e, occ.trace_id)}
+                          title="Copy Trace ID"
+                        >
+                          {copiedTraceId === occ.trace_id ? (
+                            <span style={{ fontSize: '0.65rem', color: 'var(--success-color)', fontWeight: 600 }}>Copied!</span>
+                          ) : (
+                            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                            </svg>
+                          )}
+                        </button>
                       </div>
-                      <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)' }}>
+                      <div style={{ fontSize: '0.7rem', color: 'var(--text-secondary)', marginTop: '0.25rem' }}>
                         Duration: {occ.duration_ms.toFixed(1)} ms
                       </div>
                     </div>
-                    <a
-                      href={getTempoLink(occ.trace_id)}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <button
+                      onClick={() => handleViewTraceDetails(occ.trace_id)}
                       className="occ-tempo-link"
+                      style={{ border: 'none', flexShrink: 0 }}
                     >
-                      Tempo
-                    </a>
+                      View Trace
+                    </button>
                   </div>
                 ))}
               </div>
@@ -577,6 +717,79 @@ export default function Dashboard() {
           </div>
         )}
       </section>
+
+      {/* Trace Detail Modal */}
+      {selectedTraceId && (
+        <div className="modal-overlay" onClick={() => setSelectedTraceId(null)}>
+          <div className="modal-content animate-fade-in-up" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <div className="modal-title">
+                Trace Diagnostics
+                <span className="modal-subtitle">ID: {selectedTraceId}</span>
+              </div>
+              <button className="refresh-button" style={{ padding: '0.25rem 0.5rem' }} onClick={() => setSelectedTraceId(null)}>
+                Close
+              </button>
+            </div>
+            
+            <div className="modal-body">
+              {loadingTrace ? (
+                <div style={{ display: 'flex', justifyContent: 'center', padding: '5rem' }}>
+                  <div className="badge-pulse" style={{ backgroundColor: 'var(--accent-color)' }}></div>
+                </div>
+              ) : traceSpans.length === 0 ? (
+                <div className="empty-state">No spans found for this trace ID.</div>
+              ) : (
+                <div className="trace-split-layout">
+                  {/* Left: Tree View */}
+                  <div className="trace-tree-section">
+                    <div className="section-heading">Call Hierarchy (Error Paths)</div>
+                    <div className="tree-container">
+                      {renderTraceTree(buildTraceTree(traceSpans))}
+                    </div>
+                  </div>
+                  
+                  {/* Right: Exception Detail Panel */}
+                  <div className="trace-details-section">
+                    <div className="section-heading">Span Diagnostics</div>
+                    {selectedTraceSpan ? (
+                      <div className="diagnostics-details">
+                        <div className="diag-row">
+                          <span className="diag-label">Service</span>
+                          <span className="diag-value" style={{ color: 'var(--accent-color)', fontWeight: 600 }}>{selectedTraceSpan.service_name}</span>
+                        </div>
+                        <div className="diag-row">
+                          <span className="diag-label">Operation</span>
+                          <span className="diag-value" style={{ fontFamily: 'monospace', wordBreak: 'break-all' }}>{selectedTraceSpan.endpoint_api}</span>
+                        </div>
+                        <div className="diag-row">
+                          <span className="diag-label">Span ID</span>
+                          <span className="diag-value" style={{ fontFamily: 'monospace' }}>{selectedTraceSpan.span_id}</span>
+                        </div>
+                        <div className="diag-row">
+                          <span className="diag-label">Parent Span ID</span>
+                          <span className="diag-value" style={{ fontFamily: 'monospace' }}>{selectedTraceSpan.parent_span_id || 'None (Root Span)'}</span>
+                        </div>
+                        <div className="diag-row">
+                          <span className="diag-label">Duration</span>
+                          <span className="diag-value">{selectedTraceSpan.duration_ms.toFixed(2)} ms</span>
+                        </div>
+                        
+                        <div className="diag-error-box">
+                          <div className="diag-error-title">Exception Message</div>
+                          <div className="diag-error-content">{selectedTraceSpan.error_message}</div>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="empty-state" style={{ padding: '2rem' }}>Select a span in the hierarchy to view error details.</div>
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

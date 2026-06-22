@@ -71,7 +71,11 @@ export async function GET(request: Request) {
     }
 
     // 2. Overview: Query aggregated stats, signatures, and 24h timeline
-    // Get signatures list
+    const limit = Number(searchParams.get('limit') || '10');
+    const offset = Number(searchParams.get('offset') || '0');
+    const onlySignatures = searchParams.get('only_signatures') === 'true';
+
+    // Get signatures list with pagination
     const signaturesSet = await clickhouse.query({
       query: `
         SELECT 
@@ -85,10 +89,29 @@ export async function GET(request: Request) {
           last_seen
         FROM error_signatures FINAL
         ORDER BY last_seen DESC
+        LIMIT {lim: UInt64} OFFSET {off: UInt64}
       `,
+      query_params: {
+        lim: limit,
+        off: offset
+      },
       format: 'JSONEachRow',
     });
     const signatures = await signaturesSet.json();
+
+    if (onlySignatures) {
+      return NextResponse.json({ signatures });
+    }
+
+    // Get total signatures count for stats (without limit/offset)
+    const totalSignaturesSet = await clickhouse.query({
+      query: `
+        SELECT count() as count FROM error_signatures FINAL
+      `,
+      format: 'JSONEachRow',
+    });
+    const totalSignaturesRows = await totalSignaturesSet.json() as any[];
+    const totalSignatures = Number(totalSignaturesRows[0]?.count || 0);
 
     // Get 24-hour error count
     const count24hSet = await clickhouse.query({
@@ -131,7 +154,7 @@ export async function GET(request: Request) {
 
     return NextResponse.json({
       stats: {
-        totalSignatures: signatures.length,
+        totalSignatures,
         totalErrors24h,
         totalErrors1h,
       },
