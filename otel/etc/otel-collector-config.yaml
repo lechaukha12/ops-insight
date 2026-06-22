@@ -1,0 +1,85 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+  prometheus:
+    config:
+      scrape_configs:
+        - job_name: 'otelcol'
+          scrape_interval: 10s
+          static_configs:
+            - targets: ['0.0.0.0:8888']
+exporters:
+  logging:
+
+  otlp/tempo:
+    endpoint: tempo:4317
+    tls:
+      insecure: true
+    timeout: 60s
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+  otlphttp/logs:
+    endpoint: "http://loki:3100/otlp"
+    tls:
+      insecure: true
+  otlphttp/insight:
+    endpoint: "http://insight-service:8000"
+    encoding: json
+    compression: none
+    tls:
+      insecure: true
+
+processors:
+  batch:
+    send_batch_size: 2000
+    send_batch_max_size: 5000
+
+  filter/errors:
+    error_mode: ignore
+    traces:
+      span:
+        - status.code != STATUS_CODE_ERROR
+
+  transform:
+    error_mode: ignore
+    trace_statements:
+      - context: span
+        statements:
+          # Automatically normalize dynamic span names ending with _rpc or _rp
+          # Example: user_get_profile_queue_12345_rpc -> user_get_profile_queue_*_rpc
+          - replace_pattern(name, "_([^_]+)_rpc?$", "_*_rpc")
+
+          # Strip query parameters from span name (if name is a URL)
+          - replace_pattern(name, "\\?.*$", "")
+
+          # Strip query parameters from http.url attribute to avoid cardinality explosion/PII leaks
+          - replace_pattern(attributes["http.url"], "\\?.*$", "") where attributes["http.url"] != nil
+
+    metric_statements:
+      - context: metric
+        statements:
+          # Clear metric descriptions to resolve Prometheus HELP string conflicts
+          - set(description, "")
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch, transform]
+      exporters: [otlp/tempo]
+    traces/insight:
+      receivers: [otlp]
+      processors: [transform, filter/errors, batch]
+      exporters: [otlphttp/insight]
+    metrics/spanmetrics:
+      receivers: [otlp]
+      processors: [batch, transform]
+      exporters: [prometheus]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [otlphttp/logs]

@@ -1,0 +1,51 @@
+auth_enabled: false
+
+server:
+  http_listen_port: 3100
+common:
+  instance_addr: 127.0.0.1
+  path_prefix: /loki
+  replication_factor: 1
+  ring:
+    kvstore:
+      store: inmemory
+
+compactor:
+  working_directory: /loki/compactor
+  compaction_interval: 5m
+
+schema_config:
+  configs:
+    - from: 2020-10-24
+      store: tsdb
+      object_store: s3
+      schema: v13
+      index:
+        prefix: index_
+        period: 24h
+
+limits_config:
+  split_queries_by_interval: 15m    # Chia nhỏ các truy vấn thời gian dài thành các khoảng 15 phút để chạy cuốn chiếu, tránh OOM RAM
+  max_line_size: 512000
+  ingestion_rate_mb: 20
+  ingestion_burst_size_mb: 40
+  max_query_parallelism: 8          # Giới hạn 8 luồng xử lý song song cho mỗi query để tránh quá tải 12 CPU Cores
+  max_concurrent_tail_requests: 10
+
+query_range:
+  align_queries_with_step: true
+  max_retries: 5
+  cache_results: true
+storage_config:
+ tsdb_shipper:
+   active_index_directory: /loki/index
+   cache_location: /loki/index_cache
+ aws:
+   s3: s3://devops:123456a%40@minio:9000/loki 
+   s3forcepathstyle: true
+   access_key_id: devops
+   secret_access_key: "123456a@"
+   insecure: true
+   endpoint: minio:9000
+analytics:
+  reporting_enabled: false
