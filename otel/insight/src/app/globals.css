@@ -82,9 +82,15 @@ body {
 }
 
 .header-logo::before {
-  content: "⚡";
-  font-size: 1.75rem;
-  -webkit-text-fill-color: initial;
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background-color: var(--accent-color);
+  border-radius: 50%;
+  margin-right: 8px;
+  box-shadow: 0 0 12px var(--accent-color);
+  align-self: center;
 }
 
 .header-title {
@@ -441,5 +447,219 @@ body {
   100% {
     transform: scale(0.95);
     box-shadow: 0 0 0 0 rgba(244, 63, 94, 0);
+  }
+}
+
+/* --- Version 1.1 UI Improvements --- */
+
+/* 1. Stat Card Icons */
+.stat-icon-wrapper {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.stat-icon-wrapper.cyan {
+  background: rgba(6, 182, 212, 0.1);
+  color: var(--accent-color);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+
+.stat-icon-wrapper.red {
+  background: rgba(244, 63, 94, 0.1);
+  color: var(--error-color);
+  border: 1px solid rgba(244, 63, 94, 0.2);
+}
+
+/* 2. Search and filter controls row */
+.controls-row {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.search-input {
+  flex: 1.5;
+  min-width: 200px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--card-border);
+  color: var(--text-primary);
+  padding: 0.5rem 0.85rem;
+  border-radius: 6px;
+  outline: none;
+  font-size: 0.875rem;
+  transition: all 0.2s ease;
+}
+
+.search-input:focus {
+  border-color: var(--accent-color);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.2);
+}
+
+.filter-select {
+  flex: 1;
+  min-width: 150px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--card-border);
+  color: var(--text-primary);
+  padding: 0.5rem 0.85rem;
+  border-radius: 6px;
+  outline: none;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.filter-select:focus {
+  border-color: var(--accent-color);
+}
+
+.filter-select option {
+  background: var(--bg-color);
+  color: var(--text-primary);
+}
+
+/* 3. Chart axis and label typography */
+.chart-axis-text {
+  fill: var(--text-secondary);
+  font-size: 10px;
+  font-family: var(--font-family);
+  font-weight: 500;
+  opacity: 0.8;
+}
+
+.chart-axis-text.Y {
+  text-anchor: end;
+}
+
+.chart-axis-text.X {
+  alignment-baseline: hanging;
+}
+
+/* 4. Chart Tooltip */
+.chart-tooltip {
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid var(--card-border);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 10px var(--error-glow);
+  padding: 0.5rem 0.75rem;
+  border-radius: 6px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}
+
+.tooltip-time {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  margin-bottom: 2px;
+}
+
+.tooltip-value {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--error-color);
+}
+
+/* 5. Pie Chart Layout & Legends */
+.pie-chart-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  width: 100%;
+  padding: 0.5rem 0;
+}
+
+@media (min-width: 640px) {
+  .pie-chart-panel {
+    flex-direction: row;
+    justify-content: space-around;
+    gap: 1rem;
+  }
+}
+
+.pie-chart-svg-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  filter: drop-shadow(0px 8px 20px rgba(0,0,0,0.4));
+}
+
+.pie-slice {
+  cursor: pointer;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.pie-slice:hover {
+  opacity: 0.85;
+}
+
+.pie-chart-legend {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 100%;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+}
+
+.legend-color-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.legend-label {
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+.legend-percentage {
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-left: auto;
+}
+
+/* 6. Keyframe Animations */
+.animate-fade-in-up {
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
   }
 }

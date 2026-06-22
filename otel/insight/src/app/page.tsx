@@ -42,6 +42,14 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [loadingOccurrences, setLoadingOccurrences] = useState(false);
 
+  // Search & filter states
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedService, setSelectedService] = useState('');
+  const [sortBy, setSortBy] = useState<'last_seen' | 'first_seen' | 'count'>('last_seen');
+
+  // Chart tooltip state
+  const [hoveredPoint, setHoveredPoint] = useState<{ x: number; y: number; time: string; count: number } | null>(null);
+
   // Dynamically compute selected signature details to avoid infinite loop state updates
   const selectedSignature = signatures.find((s) => s.signature_id === selectedSignatureId) || null;
 
@@ -107,65 +115,249 @@ export default function Dashboard() {
     }
   };
 
-  // Render inline SVG chart
+  const formatTime = (dateStr: string) => {
+    try {
+      const isoStr = dateStr.replace(' ', 'T') + 'Z';
+      const date = new Date(isoStr);
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
+    } catch {
+      return dateStr;
+    }
+  };
+
+  // Calculate unique services for filtering
+  const servicesList = Array.from(new Set(signatures.map(s => s.service_name)));
+
+  // Filter & sort signatures list
+  const filteredSignatures = signatures
+    .filter(sig => {
+      const matchSearch = 
+        sig.service_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        sig.endpoint_api.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        sig.error_message.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      const matchService = selectedService ? sig.service_name === selectedService : true;
+      
+      return matchSearch && matchService;
+    })
+    .sort((a, b) => {
+      if (sortBy === 'count') {
+        return Number(b.count) - Number(a.count);
+      }
+      if (sortBy === 'first_seen') {
+        return new Date(b.first_seen).getTime() - new Date(a.first_seen).getTime();
+      }
+      return new Date(b.last_seen).getTime() - new Date(a.last_seen).getTime();
+    });
+
+  // Render SVG Pie/Donut Chart for Signature Distribution
+  const renderPieChart = () => {
+    if (signatures.length === 0) {
+      return <div className="empty-state">No error signature data to distribute.</div>;
+    }
+
+    const totalCount = signatures.reduce((sum, s) => sum + Number(s.count), 0);
+    if (totalCount === 0) {
+      return <div className="empty-state">No error occurrences recorded yet.</div>;
+    }
+
+    // Sort and get top 4, group others
+    const sortedSigs = [...signatures].sort((a, b) => Number(b.count) - Number(a.count));
+    const topSigs = sortedSigs.slice(0, 4);
+    const otherSigs = sortedSigs.slice(4);
+
+    const chartColors = ['#06b6d4', '#f43f5e', '#a5b4fc', '#f59e0b'];
+    const chartData = topSigs.map((s, idx) => ({
+      label: `${s.service_name} (${s.endpoint_api})`,
+      count: Number(s.count),
+      color: chartColors[idx % chartColors.length],
+    }));
+
+    if (otherSigs.length > 0) {
+      const otherCount = otherSigs.reduce((sum, s) => sum + Number(s.count), 0);
+      chartData.push({
+        label: 'Others',
+        count: otherCount,
+        color: '#6b7280',
+      });
+    }
+
+    const cx = 100;
+    const cy = 100;
+    const r = 65;
+    let accumulatedAngle = -Math.PI / 2;
+
+    const slices = chartData.map((d) => {
+      const percentage = d.count / totalCount;
+      const angle = percentage * 2 * Math.PI;
+
+      const x1 = cx + r * Math.cos(accumulatedAngle);
+      const y1 = cy + r * Math.sin(accumulatedAngle);
+
+      accumulatedAngle += angle;
+
+      const x2 = cx + r * Math.cos(accumulatedAngle);
+      const y2 = cy + r * Math.sin(accumulatedAngle);
+
+      const largeArcFlag = angle > Math.PI ? 1 : 0;
+      const pathData = `M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArcFlag} 1 ${x2} ${y2} Z`;
+
+      return {
+        pathData,
+        color: d.color,
+        label: d.label,
+        percentage: (percentage * 100).toFixed(1),
+        count: d.count,
+      };
+    });
+
+    return (
+      <div className="pie-chart-panel">
+        <div className="pie-chart-svg-container">
+          <svg width="180" height="180" viewBox="0 0 200 200">
+            {slices.map((slice, idx) => (
+              <path
+                key={idx}
+                d={slice.pathData}
+                fill={slice.color}
+                stroke="var(--bg-color)"
+                strokeWidth="2.5"
+                className="pie-slice"
+              >
+                <title>{`${slice.label}: ${slice.count} errors (${slice.percentage}%)`}</title>
+              </path>
+            ))}
+            <circle cx={cx} cy={cy} r="45" fill="var(--bg-color)" />
+          </svg>
+        </div>
+        <div className="pie-chart-legend">
+          {slices.map((slice, idx) => (
+            <div key={idx} className="legend-item">
+              <span className="legend-color-dot" style={{ backgroundColor: slice.color }}></span>
+              <span className="legend-label" title={slice.label}>{slice.label}</span>
+              <span className="legend-percentage">{slice.percentage}%</span>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  // Render smooth Bezier curve SVG timeline chart with axes labels
   const renderChart = () => {
     if (timeline.length === 0) {
       return <div className="empty-state">No error metrics recorded in the last 24 hours.</div>;
     }
 
-    const maxCount = Math.max(...timeline.map(t => t.count), 5); // Ensure scale height is at least 5
+    const maxCount = Math.max(...timeline.map(t => t.count), 5);
     const width = 800;
-    const height = 200;
-    const padding = 20;
+    const height = 230;
+    const paddingLeft = 45;
+    const paddingRight = 20;
+    const paddingTop = 20;
+    const paddingBottom = 35;
 
     const points = timeline.map((t, idx) => {
-      const x = padding + (idx / (timeline.length - 1 || 1)) * (width - 2 * padding);
-      const y = height - padding - (t.count / maxCount) * (height - 2 * padding);
+      const x = paddingLeft + (idx / (timeline.length - 1 || 1)) * (width - paddingLeft - paddingRight);
+      const y = height - paddingBottom - (t.count / maxCount) * (height - paddingTop - paddingBottom);
       return { x, y, time: t.time, count: t.count };
     });
 
-    const pathData = points.length > 0 
-      ? `M ${points[0].x} ${points[0].y} ` + points.slice(1).map(p => `L ${p.x} ${p.y}`).join(' ')
-      : '';
+    // Helper to generate cubic Bezier curve commands
+    const getBezierPath = (pts: typeof points) => {
+      if (pts.length === 0) return '';
+      if (pts.length === 1) return `M ${pts[0].x} ${pts[0].y}`;
+      if (pts.length === 2) return `M ${pts[0].x} ${pts[0].y} L ${pts[1].x} ${pts[1].y}`;
+      
+      let path = `M ${pts[0].x} ${pts[0].y}`;
+      for (let i = 0; i < pts.length - 1; i++) {
+        const p0 = pts[i - 1] || pts[i];
+        const p1 = pts[i];
+        const p2 = pts[i + 1];
+        const p3 = pts[i + 2] || p2;
+        
+        const cp1x = p1.x + (p2.x - p0.x) / 6;
+        const cp1y = p1.y + (p2.y - p0.y) / 6;
+        const cp2x = p2.x - (p3.x - p1.x) / 6;
+        const cp2y = p2.y - (p3.y - p1.y) / 6;
+        
+        path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`;
+      }
+      return path;
+    };
 
+    const pathData = getBezierPath(points);
     const areaData = points.length > 0
-      ? `${pathData} L ${points[points.length - 1].x} ${height - padding} L ${points[0].x} ${height - padding} Z`
+      ? `${pathData} L ${points[points.length - 1].x} ${height - paddingBottom} L ${points[0].x} ${height - paddingBottom} Z`
       : '';
 
     return (
-      <div className="chart-container">
+      <div className="chart-container" style={{ position: 'relative' }}>
         <svg className="chart-svg" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet">
           <defs>
             <linearGradient id="chart-gradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.4"/>
+              <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.35"/>
               <stop offset="100%" stopColor="#f43f5e" stopOpacity="0.0"/>
             </linearGradient>
           </defs>
 
           {/* Grid lines */}
-          <line x1={padding} y1={padding} x2={width - padding} y2={padding} className="chart-grid-line" />
-          <line x1={padding} y1={height / 2} x2={width - padding} y2={height / 2} className="chart-grid-line" />
-          <line x1={padding} y1={height - padding} x2={width - padding} y2={height - padding} className="chart-grid-line" />
+          <line x1={paddingLeft} y1={paddingTop} x2={width - paddingRight} y2={paddingTop} className="chart-grid-line" />
+          <line x1={paddingLeft} y1={(height - paddingTop - paddingBottom) / 2 + paddingTop} x2={width - paddingRight} y2={(height - paddingTop - paddingBottom) / 2 + paddingTop} className="chart-grid-line" />
+          <line x1={paddingLeft} y1={height - paddingBottom} x2={width - paddingRight} y2={height - paddingBottom} className="chart-grid-line" />
+
+          {/* Axis labels */}
+          <text x={paddingLeft - 12} y={paddingTop + 4} className="chart-axis-text Y" textAnchor="end">{maxCount}</text>
+          <text x={paddingLeft - 12} y={(height - paddingTop - paddingBottom) / 2 + paddingTop + 4} className="chart-axis-text Y" textAnchor="end">{Math.round(maxCount / 2)}</text>
+          <text x={paddingLeft - 12} y={height - paddingBottom + 4} className="chart-axis-text Y" textAnchor="end">0</text>
+
+          {points.length > 0 && (
+            <>
+              <text x={points[0].x} y={height - 12} className="chart-axis-text X" textAnchor="start">{formatTime(points[0].time)}</text>
+              {points.length > 2 && (
+                <text x={points[Math.floor(points.length / 2)].x} y={height - 12} className="chart-axis-text X" textAnchor="middle">{formatTime(points[Math.floor(points.length / 2)].time)}</text>
+              )}
+              <text x={points[points.length - 1].x} y={height - 12} className="chart-axis-text X" textAnchor="end">{formatTime(points[points.length - 1].time)}</text>
+            </>
+          )}
 
           {/* Area fill */}
           {points.length > 0 && <path d={areaData} className="chart-area" />}
 
-          {/* Line */}
+          {/* Smooth Line */}
           {points.length > 0 && <path d={pathData} className="chart-line" />}
 
-          {/* Interaction Dots */}
+          {/* Interactive Dots */}
           {points.map((p, i) => (
             <circle
               key={i}
               cx={p.x}
               cy={p.y}
-              r="4"
+              r={hoveredPoint?.time === p.time ? "6" : "4"}
               className="chart-dot"
-            >
-              <title>{`${p.count} errors at ${p.time}`}</title>
-            </circle>
+              onMouseEnter={() => setHoveredPoint(p)}
+              onMouseLeave={() => setHoveredPoint(null)}
+            />
           ))}
         </svg>
+
+        {/* Hover Tooltip showing count & time */}
+        {hoveredPoint && (
+          <div 
+            className="chart-tooltip animate-fade-in"
+            style={{
+              position: 'absolute',
+              left: `${(hoveredPoint.x / width) * 100}%`,
+              top: `${(hoveredPoint.y / height) * 100 - 45}%`,
+              transform: 'translateX(-50%)',
+              pointerEvents: 'none',
+              zIndex: 10,
+            }}
+          >
+            <div className="tooltip-time">{formatDate(hoveredPoint.time)}</div>
+            <div className="tooltip-value">{hoveredPoint.count} errors</div>
+          </div>
+        )}
       </div>
     );
   };
@@ -189,30 +381,46 @@ export default function Dashboard() {
           <div className="header-logo">Insight</div>
           <div className="header-title">Traces Error Aggregator</div>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem', color: 'var(--text-secondary)' }}>
-            <span className="badge-pulse error"></span>
-            <span>Real-time Ingestion Stream Active</span>
-          </div>
+        <div>
           <button className="refresh-button" onClick={fetchData}>
-            🔄 Sync Data
+            Sync Data
           </button>
         </div>
       </header>
 
-      {/* Cards Row */}
+      {/* Cards Row with Premium Glow and Icons */}
       <section className="stats-grid">
         <div className="stat-card">
+          <div className="stat-icon-wrapper cyan">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
           <div className="stat-title">Error Signatures</div>
           <div className="stat-value" style={{ color: 'var(--accent-color)' }}>{stats.totalSignatures}</div>
           <div className="stat-subtitle">Unique error patterns detected</div>
         </div>
+        
         <div className="stat-card error">
+          <div className="stat-icon-wrapper red">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+            </svg>
+          </div>
           <div className="stat-title">Last 1 Hour Errors</div>
           <div className="stat-value" style={{ color: 'var(--error-color)' }}>{stats.totalErrors1h}</div>
           <div className="stat-subtitle">Spans reporting error state</div>
         </div>
+
         <div className="stat-card error">
+          <div className="stat-icon-wrapper red">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
           <div className="stat-title">Last 24 Hours Errors</div>
           <div className="stat-value" style={{ color: 'var(--error-color)' }}>{stats.totalErrors24h}</div>
           <div className="stat-subtitle">Cumulative failures in 24h</div>
@@ -221,37 +429,69 @@ export default function Dashboard() {
 
       {/* Charts Row */}
       <section className="panel-row">
-        <div className="panel">
+        <div className="panel animate-fade-in-up">
           <div className="panel-header">
-            <div className="panel-title">📉 24-Hour Failure Timeline</div>
+            <div className="panel-title">24-Hour Failure Timeline</div>
             <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>10m Resolution</span>
           </div>
           {renderChart()}
         </div>
-        <div className="panel" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-          <div className="panel-title" style={{ marginBottom: '1rem' }}>System Status</div>
-          <div style={{ fontSize: '3rem', margin: '0.5rem 0' }}>✅</div>
-          <div style={{ fontWeight: 600, color: 'var(--success-color)' }}>Insight Engine Healthy</div>
-          <div style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', textAlign: 'center', marginTop: '0.5rem', padding: '0 1rem' }}>
-            Next.js OTLP endpoint active on port 8000. Ingesting traces directly from OTel Collector.
+        
+        <div className="panel animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+          <div className="panel-header">
+            <div className="panel-title">Signature Distribution</div>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Share of Failures</span>
           </div>
+          {renderPieChart()}
         </div>
       </section>
 
       {/* Details Row */}
-      <section className="panel-row" style={{ gridTemplateColumns: selectedSignature ? '1.2fr 1fr' : '1fr' }}>
+      <section className="panel-row animate-fade-in-up" style={{ gridTemplateColumns: selectedSignature ? '1.2fr 1fr' : '1fr', animationDelay: '0.2s' }}>
         {/* Signatures List */}
         <div className="panel">
-          <div className="panel-header">
-            <div className="panel-title">🚨 Active Error Signatures</div>
-            <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Grouped by Fingerprint</span>
+          <div className="panel-header" style={{ flexDirection: 'column', alignItems: 'stretch', gap: '1rem', marginBottom: '1.5rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div className="panel-title">Active Error Signatures</div>
+              <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Grouped by Fingerprint</span>
+            </div>
+            
+            {/* Search, Filter, Sort Controls */}
+            <div className="controls-row">
+              <input
+                type="text"
+                placeholder="Search service, API, error..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="search-input"
+              />
+              <select
+                value={selectedService}
+                onChange={(e) => setSelectedService(e.target.value)}
+                className="filter-select"
+              >
+                <option value="">All Services</option>
+                {servicesList.map(s => (
+                  <option key={s} value={s}>{s}</option>
+                ))}
+              </select>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as any)}
+                className="filter-select"
+              >
+                <option value="last_seen">Sort by Last Seen</option>
+                <option value="first_seen">Sort by First Seen</option>
+                <option value="count">Sort by Error Count</option>
+              </select>
+            </div>
           </div>
           
-          {signatures.length === 0 ? (
-            <div className="empty-state">No error traces collected yet. Generate traffic or errors to verify.</div>
+          {filteredSignatures.length === 0 ? (
+            <div className="empty-state">No matching error signatures found.</div>
           ) : (
             <div className="signatures-list">
-              {signatures.map((sig) => (
+              {filteredSignatures.map((sig) => (
                 <div
                   key={sig.signature_id}
                   className={`signature-row ${selectedSignatureId === sig.signature_id ? 'active' : ''}`}
@@ -275,10 +515,10 @@ export default function Dashboard() {
 
         {/* Selected Signature Incidents Drill-down */}
         {selectedSignature && (
-          <div className="panel">
+          <div className="panel animate-fade-in">
             <div className="panel-header">
               <div className="panel-title" style={{ color: 'var(--accent-color)' }}>
-                🔍 Signature Incident Logs
+                Signature Incident Logs
               </div>
               <button 
                 className="refresh-button" 
