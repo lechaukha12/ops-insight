@@ -82,7 +82,7 @@ export default function Dashboard() {
       const res = await fetch(`/api/signatures?limit=${loadedCount}`);
       if (!res.ok) throw new Error('Failed to fetch data');
       const data = await res.json();
-      
+
       setStats(data.stats);
       setSignatures(data.signatures);
       setTimeline(data.timeline || []);
@@ -125,7 +125,7 @@ export default function Dashboard() {
       if (!res.ok) throw new Error('Failed to fetch trace details');
       const data = await res.json();
       setTraceSpans(data.spans || []);
-      
+
       // Auto-select the root cause span by default to show its exception message
       const rootCause = data.spans?.find((s: Span) => s.is_root_cause);
       if (rootCause) {
@@ -164,7 +164,7 @@ export default function Dashboard() {
   const renderTraceTree = (nodes: (Span & { children: Span[] })[], depth = 0) => {
     return nodes.map((node) => (
       <div key={node.span_id} className="tree-node-wrapper" style={{ marginLeft: depth > 0 ? `${depth * 16}px` : '0px' }}>
-        <div 
+        <div
           className={`tree-node ${selectedTraceSpan?.span_id === node.span_id ? 'active' : ''}`}
           onClick={() => setSelectedTraceSpan(node)}
         >
@@ -247,13 +247,13 @@ export default function Dashboard() {
   // Filter & sort signatures list
   const filteredSignatures = signatures
     .filter(sig => {
-      const matchSearch = 
+      const matchSearch =
         sig.service_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         sig.endpoint_api.toLowerCase().includes(searchTerm.toLowerCase()) ||
         sig.error_message.toLowerCase().includes(searchTerm.toLowerCase());
-      
+
       const matchService = selectedService ? sig.service_name === selectedService : true;
-      
+
       return matchSearch && matchService;
     })
     .sort((a, b) => {
@@ -351,20 +351,20 @@ export default function Dashboard() {
               </path>
             ))}
             <circle cx={cx} cy={cy} r="45" fill="var(--bg-color)" />
-            <text 
-              x={cx} 
-              y={cy - 4} 
-              textAnchor="middle" 
-              alignmentBaseline="middle" 
+            <text
+              x={cx}
+              y={cy - 4}
+              textAnchor="middle"
+              alignmentBaseline="middle"
               style={{ fill: 'var(--text-primary)', fontSize: '18px', fontWeight: 800, fontFamily: 'var(--font-family)' }}
             >
               {stats.totalSignatures}
             </text>
-            <text 
-              x={cx} 
-              y={cy + 14} 
-              textAnchor="middle" 
-              alignmentBaseline="middle" 
+            <text
+              x={cx}
+              y={cy + 14}
+              textAnchor="middle"
+              alignmentBaseline="middle"
               style={{ fill: 'var(--text-secondary)', fontSize: '9px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}
             >
               Patterns
@@ -409,19 +409,19 @@ export default function Dashboard() {
       if (pts.length === 0) return '';
       if (pts.length === 1) return `M ${pts[0].x} ${pts[0].y}`;
       if (pts.length === 2) return `M ${pts[0].x} ${pts[0].y} L ${pts[1].x} ${pts[1].y}`;
-      
+
       let path = `M ${pts[0].x} ${pts[0].y}`;
       for (let i = 0; i < pts.length - 1; i++) {
         const p0 = pts[i - 1] || pts[i];
         const p1 = pts[i];
         const p2 = pts[i + 1];
         const p3 = pts[i + 2] || p2;
-        
+
         const cp1x = p1.x + (p2.x - p0.x) / 6;
         const cp1y = p1.y + (p2.y - p0.y) / 6;
         const cp2x = p2.x - (p3.x - p1.x) / 6;
         const cp2y = p2.y - (p3.y - p1.y) / 6;
-        
+
         path += ` C ${cp1x} ${cp1y}, ${cp2x} ${cp2y}, ${p2.x} ${p2.y}`;
       }
       return path;
@@ -437,8 +437,8 @@ export default function Dashboard() {
         <svg className="chart-svg" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet">
           <defs>
             <linearGradient id="chart-gradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.35"/>
-              <stop offset="100%" stopColor="#f43f5e" stopOpacity="0.0"/>
+              <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.35" />
+              <stop offset="100%" stopColor="#f43f5e" stopOpacity="0.0" />
             </linearGradient>
           </defs>
 
@@ -484,7 +484,7 @@ export default function Dashboard() {
 
         {/* Hover Tooltip showing count & time */}
         {hoveredPoint && (
-          <div 
+          <div
             className="chart-tooltip animate-fade-in"
             style={{
               position: 'absolute',
@@ -520,7 +520,7 @@ export default function Dashboard() {
       <header className="dashboard-header">
         <div className="header-title-container">
           <div className="header-logo">Insight</div>
-          <div className="header-title">Traces Error Aggregator</div>
+          <div className="header-title">Dashboard vận hành và giám sát hệ thống</div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
           <div className="refresh-select-container">
@@ -548,20 +548,20 @@ export default function Dashboard() {
         <div className="stat-card">
           <div className="stat-icon-wrapper cyan">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-              <line x1="12" y1="9" x2="12" y2="13"/>
-              <line x1="12" y1="17" x2="12.01" y2="17"/>
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+              <line x1="12" y1="9" x2="12" y2="13" />
+              <line x1="12" y1="17" x2="12.01" y2="17" />
             </svg>
           </div>
           <div className="stat-title">Error Signatures</div>
           <div className="stat-value" style={{ color: 'var(--accent-color)' }}>{stats.totalSignatures}</div>
           <div className="stat-subtitle">Unique error patterns detected</div>
         </div>
-        
+
         <div className="stat-card error">
           <div className="stat-icon-wrapper red">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
             </svg>
           </div>
           <div className="stat-title">Last 1 Hour Errors</div>
@@ -572,8 +572,8 @@ export default function Dashboard() {
         <div className="stat-card error">
           <div className="stat-icon-wrapper red">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="12" cy="12" r="10"/>
-              <polyline points="12 6 12 12 16 14"/>
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
             </svg>
           </div>
           <div className="stat-title">Last 24 Hours Errors</div>
@@ -591,7 +591,7 @@ export default function Dashboard() {
           </div>
           {renderChart()}
         </div>
-        
+
         <div className="panel animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
           <div className="panel-header">
             <div className="panel-title">Signature Distribution</div>
@@ -610,7 +610,7 @@ export default function Dashboard() {
               <div className="panel-title">Active Error Signatures</div>
               <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Grouped by Fingerprint</span>
             </div>
-            
+
             {/* Search, Filter, Sort Controls */}
             <div className="controls-row">
               <input
@@ -641,7 +641,7 @@ export default function Dashboard() {
               </select>
             </div>
           </div>
-          
+
           {filteredSignatures.length === 0 ? (
             <div className="empty-state">No matching error signatures found.</div>
           ) : (
@@ -668,7 +668,7 @@ export default function Dashboard() {
               </div>
               {signatures.length < stats.totalSignatures && (
                 <div style={{ display: 'flex', justifyContent: 'center', marginTop: '1.5rem' }}>
-                  <button 
+                  <button
                     onClick={() => setLoadedCount(prev => prev + 10)}
                     className="refresh-button"
                     style={{ width: '100%', justifyContent: 'center', padding: '0.75rem', fontWeight: 600 }}
@@ -688,15 +688,15 @@ export default function Dashboard() {
               <div className="panel-title" style={{ color: 'var(--accent-color)' }}>
                 Signature Incident Logs
               </div>
-              <button 
-                className="refresh-button" 
+              <button
+                className="refresh-button"
                 style={{ padding: '0.25rem 0.5rem', fontSize: '0.75rem' }}
                 onClick={() => setSelectedSignatureId(null)}
               >
                 Close
               </button>
             </div>
-            
+
             <div style={{ marginBottom: '1.25rem' }}>
               <div style={{ fontSize: '0.8rem', color: 'var(--text-secondary)' }}>FINGERPRINT ID</div>
               <div style={{ fontSize: '0.85rem', fontFamily: 'monospace', fontWeight: 600, color: 'var(--text-primary)', wordBreak: 'break-all' }}>
@@ -733,8 +733,8 @@ export default function Dashboard() {
                             <span style={{ fontSize: '0.65rem', color: 'var(--success-color)', fontWeight: 600 }}>Copied!</span>
                           ) : (
                             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
                             </svg>
                           )}
                         </button>
@@ -771,7 +771,7 @@ export default function Dashboard() {
                 Close
               </button>
             </div>
-            
+
             <div className="modal-body">
               {loadingTrace ? (
                 <div style={{ display: 'flex', justifyContent: 'center', padding: '5rem' }}>
@@ -788,7 +788,7 @@ export default function Dashboard() {
                       {renderTraceTree(buildTraceTree(traceSpans))}
                     </div>
                   </div>
-                  
+
                   {/* Right: Exception Detail Panel */}
                   <div className="trace-details-section">
                     <div className="section-heading">Span Diagnostics</div>
@@ -814,7 +814,7 @@ export default function Dashboard() {
                           <span className="diag-label">Duration</span>
                           <span className="diag-value">{selectedTraceSpan.duration_ms.toFixed(2)} ms</span>
                         </div>
-                        
+
                         <div className="diag-error-box">
                           <div className="diag-error-title">Exception Message</div>
                           <div className="diag-error-content">{selectedTraceSpan.error_message}</div>
