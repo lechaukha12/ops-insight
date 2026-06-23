@@ -1,0 +1,1754 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bảng màu — Nam A Bank Knowhow Portal</title>
+<style>
+  :root {
+    --ink: #0f172a;
+    --muted: #526072;
+    --line: #d6dde6;
+    --bg: #f5f8fc;
+    --card: #ffffff;
+    --font: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --mono: ui-monospace, 'SF Mono', Menlo, Monaco, Consolas, monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: var(--font);
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 48px 32px 80px; }
+  header.masthead {
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 24px;
+    margin-bottom: 40px;
+  }
+  .eyebrow { font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+  h1 { font-size: 34px; margin: 8px 0 6px; letter-spacing: -0.02em; font-weight: 800; }
+  .sub { color: var(--muted); font-size: 15px; }
+  .meta { margin-top: 16px; font-size: 13px; color: var(--muted); display: flex; gap: 24px; flex-wrap: wrap; }
+  .meta b { color: var(--ink); font-weight: 600; }
+
+  .theme-section { margin-bottom: 56px; }
+  .theme-head {
+    display: flex; align-items: center; gap: 14px;
+    margin: 0 0 4px;
+  }
+  .theme-head h2 { font-size: 24px; margin: 0; letter-spacing: -0.01em; font-weight: 800; }
+  .dot { width: 16px; height: 16px; border-radius: 50%; box-shadow: inset 0 0 0 1px rgba(0,0,0,.12); }
+  .theme-desc { color: var(--muted); font-size: 14px; margin: 0 0 24px; }
+
+  .group-title {
+    font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--muted); margin: 28px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--line);
+  }
+  .grid {
+    display: grid; gap: 14px;
+    grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  }
+  .swatch {
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
+    box-shadow: 0 1px 2px rgba(15,23,42,.04);
+  }
+  .chip { height: 76px; position: relative; }
+  .chip .pair {
+    position: absolute; left: 10px; bottom: 8px; font-size: 12px; font-weight: 600;
+    padding: 2px 8px; border-radius: 999px;
+  }
+  .swatch .body { padding: 10px 12px 12px; }
+  .swatch .name { font-size: 12.5px; font-weight: 600; margin-bottom: 3px; }
+  .swatch .hex {
+    font-family: var(--mono); font-size: 12px; color: var(--muted); text-transform: uppercase;
+    user-select: all; cursor: pointer;
+  }
+  .note { font-size: 13px; color: var(--muted); margin: 6px 0 0; }
+  footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--muted); }
+  @media print {
+    body { background: #fff; }
+    .theme-section { break-inside: avoid; }
+    .swatch { break-inside: avoid; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="masthead">
+    <div class="eyebrow">Design System · Color Tokens</div>
+    <h1>Bảng màu — Knowhow Portal</h1>
+    <div class="sub">Hệ màu Material 3 · Nam A Bank Banking Ops · 3 chế độ giao diện</div>
+    <div class="meta">
+      <span><b>Chuẩn:</b> Material Design 3 (semantic role tokens)</span>
+      <span><b>Themes:</b> Light · Dark · Neon</span>
+      <span><b>Nguồn:</b> app/styles/tailwind.css</span>
+      <span><b>Ngày xuất:</b> 23/06/2026</span>
+    </div>
+  </header>
+
+  <!-- placeholder: themes injected below -->
+  <section class="theme-section">
+    <div class="theme-head"><span class="dot" style="background:#6e5e00"></span><h2>Light</h2></div>
+    <p class="theme-desc">Mặc định · Banking Ops sáng — nền xanh nhạt, primary Gold, secondary Navy.</p>
+    <div class="group-title">Brand · Primary (Gold)</div>
+    <div class="grid">
+        <div class="swatch">
+          <div class="chip" style="background:#6e5e00">
+            <span class="pair" style="background:#ffffff;color:#6e5e00">#6E5E00</span>
+          </div>
+          <div class="body">
+            <div class="name">Primary</div>
+            <div class="hex" style="color:#0f172a">--color-primary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ffffff">
+            <span class="pair" style="background:#0f172a;color:#ffffff">#FFFFFF</span>
+          </div>
+          <div class="body">
+            <div class="name">On Primary</div>
+            <div class="hex" style="color:#0f172a">--color-on-primary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#fcd800">
+            <span class="pair" style="background:#0f172a;color:#fcd800">#FCD800</span>
+          </div>
+          <div class="body">
+            <div class="name">Primary Container</div>
+            <div class="hex" style="color:#0f172a">--color-primary-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#6f5e00">
+            <span class="pair" style="background:#ffffff;color:#6f5e00">#6F5E00</span>
+          </div>
+          <div class="body">
+            <div class="name">On Primary Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-primary-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#e6c500">
+            <span class="pair" style="background:#0f172a;color:#e6c500">#E6C500</span>
+          </div>
+          <div class="body">
+            <div class="name">Inverse Primary</div>
+            <div class="hex" style="color:#0f172a">--color-inverse-primary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ffe25e">
+            <span class="pair" style="background:#0f172a;color:#ffe25e">#FFE25E</span>
+          </div>
+          <div class="body">
+            <div class="name">Primary Fixed</div>
+            <div class="hex" style="color:#0f172a">--color-primary-fixed</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#e6c500">
+            <span class="pair" style="background:#0f172a;color:#e6c500">#E6C500</span>
+          </div>
+          <div class="body">
+            <div class="name">Primary Fixed Dim</div>
+            <div class="hex" style="color:#0f172a">--color-primary-fixed-dim</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#221b00">
+            <span class="pair" style="background:#ffffff;color:#221b00">#221B00</span>
+          </div>
+          <div class="body">
+            <div class="name">On Primary Fixed</div>
+            <div class="hex" style="color:#0f172a">--color-on-primary-fixed</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#534600">
+            <span class="pair" style="background:#ffffff;color:#534600">#534600</span>
+          </div>
+          <div class="body">
+            <div class="name">On Primary Fixed Variant</div>
+            <div class="hex" style="color:#0f172a">--color-on-primary-fixed-variant</div>
+          </div>
+        </div>
+    </div>
+    <div class="group-title">Brand · Secondary (Navy)</div>
+    <div class="grid">
+        <div class="swatch">
+          <div class="chip" style="background:#175eae">
+            <span class="pair" style="background:#ffffff;color:#175eae">#175EAE</span>
+          </div>
+          <div class="body">
+            <div class="name">Secondary</div>
+            <div class="hex" style="color:#0f172a">--color-secondary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ffffff">
+            <span class="pair" style="background:#0f172a;color:#ffffff">#FFFFFF</span>
+          </div>
+          <div class="body">
+            <div class="name">On Secondary</div>
+            <div class="hex" style="color:#0f172a">--color-on-secondary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#72a9ff">
+            <span class="pair" style="background:#0f172a;color:#72a9ff">#72A9FF</span>
+          </div>
+          <div class="body">
+            <div class="name">Secondary Container</div>
+            <div class="hex" style="color:#0f172a">--color-secondary-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#003d79">
+            <span class="pair" style="background:#ffffff;color:#003d79">#003D79</span>
+          </div>
+          <div class="body">
+            <div class="name">On Secondary Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-secondary-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#d6e3ff">
+            <span class="pair" style="background:#0f172a;color:#d6e3ff">#D6E3FF</span>
+          </div>
+          <div class="body">
+            <div class="name">Secondary Fixed</div>
+            <div class="hex" style="color:#0f172a">--color-secondary-fixed</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#a8c8ff">
+            <span class="pair" style="background:#0f172a;color:#a8c8ff">#A8C8FF</span>
+          </div>
+          <div class="body">
+            <div class="name">Secondary Fixed Dim</div>
+            <div class="hex" style="color:#0f172a">--color-secondary-fixed-dim</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#001b3c">
+            <span class="pair" style="background:#ffffff;color:#001b3c">#001B3C</span>
+          </div>
+          <div class="body">
+            <div class="name">On Secondary Fixed</div>
+            <div class="hex" style="color:#0f172a">--color-on-secondary-fixed</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#00468a">
+            <span class="pair" style="background:#ffffff;color:#00468a">#00468A</span>
+          </div>
+          <div class="body">
+            <div class="name">On Secondary Fixed Variant</div>
+            <div class="hex" style="color:#0f172a">--color-on-secondary-fixed-variant</div>
+          </div>
+        </div>
+    </div>
+    <div class="group-title">Tertiary</div>
+    <div class="grid">
+        <div class="swatch">
+          <div class="chip" style="background:#355f97">
+            <span class="pair" style="background:#ffffff;color:#355f97">#355F97</span>
+          </div>
+          <div class="body">
+            <div class="name">Tertiary</div>
+            <div class="hex" style="color:#0f172a">--color-tertiary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ffffff">
+            <span class="pair" style="background:#0f172a;color:#ffffff">#FFFFFF</span>
+          </div>
+          <div class="body">
+            <div class="name">On Tertiary</div>
+            <div class="hex" style="color:#0f172a">--color-on-tertiary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#c7dbff">
+            <span class="pair" style="background:#0f172a;color:#c7dbff">#C7DBFF</span>
+          </div>
+          <div class="body">
+            <div class="name">Tertiary Container</div>
+            <div class="hex" style="color:#0f172a">--color-tertiary-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#366098">
+            <span class="pair" style="background:#ffffff;color:#366098">#366098</span>
+          </div>
+          <div class="body">
+            <div class="name">On Tertiary Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-tertiary-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#d5e3ff">
+            <span class="pair" style="background:#0f172a;color:#d5e3ff">#D5E3FF</span>
+          </div>
+          <div class="body">
+            <div class="name">Tertiary Fixed</div>
+            <div class="hex" style="color:#0f172a">--color-tertiary-fixed</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#a6c8ff">
+            <span class="pair" style="background:#0f172a;color:#a6c8ff">#A6C8FF</span>
+          </div>
+          <div class="body">
+            <div class="name">Tertiary Fixed Dim</div>
+            <div class="hex" style="color:#0f172a">--color-tertiary-fixed-dim</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#001c3b">
+            <span class="pair" style="background:#ffffff;color:#001c3b">#001C3B</span>
+          </div>
+          <div class="body">
+            <div class="name">On Tertiary Fixed</div>
+            <div class="hex" style="color:#0f172a">--color-on-tertiary-fixed</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#18477e">
+            <span class="pair" style="background:#ffffff;color:#18477e">#18477E</span>
+          </div>
+          <div class="body">
+            <div class="name">On Tertiary Fixed Variant</div>
+            <div class="hex" style="color:#0f172a">--color-on-tertiary-fixed-variant</div>
+          </div>
+        </div>
+    </div>
+    <div class="group-title">Surface & Background</div>
+    <div class="grid">
+        <div class="swatch">
+          <div class="chip" style="background:#f5f8fc">
+            <span class="pair" style="background:#0f172a;color:#f5f8fc">#F5F8FC</span>
+          </div>
+          <div class="body">
+            <div class="name">Background</div>
+            <div class="hex" style="color:#0f172a">--color-background</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#0f172a">
+            <span class="pair" style="background:#ffffff;color:#0f172a">#0F172A</span>
+          </div>
+          <div class="body">
+            <div class="name">On Background</div>
+            <div class="hex" style="color:#0f172a">--color-on-background</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#f5f8fc">
+            <span class="pair" style="background:#0f172a;color:#f5f8fc">#F5F8FC</span>
+          </div>
+          <div class="body">
+            <div class="name">Surface</div>
+            <div class="hex" style="color:#0f172a">--color-surface</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#0f172a">
+            <span class="pair" style="background:#ffffff;color:#0f172a">#0F172A</span>
+          </div>
+          <div class="body">
+            <div class="name">On Surface</div>
+            <div class="hex" style="color:#0f172a">--color-on-surface</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#526072">
+            <span class="pair" style="background:#ffffff;color:#526072">#526072</span>
+          </div>
+          <div class="body">
+            <div class="name">On Surface Variant</div>
+            <div class="hex" style="color:#0f172a">--color-on-surface-variant</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#dde4ea">
+            <span class="pair" style="background:#0f172a;color:#dde4ea">#DDE4EA</span>
+          </div>
+          <div class="body">
+            <div class="name">Surface Dim</div>
+            <div class="hex" style="color:#0f172a">--color-surface-dim</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#fbfdff">
+            <span class="pair" style="background:#0f172a;color:#fbfdff">#FBFDFF</span>
+          </div>
+          <div class="body">
+            <div class="name">Surface Bright</div>
+            <div class="hex" style="color:#0f172a">--color-surface-bright</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ffffff">
+            <span class="pair" style="background:#0f172a;color:#ffffff">#FFFFFF</span>
+          </div>
+          <div class="body">
+            <div class="name">Container Lowest</div>
+            <div class="hex" style="color:#0f172a">--color-surface-container-lowest</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#f8fbff">
+            <span class="pair" style="background:#0f172a;color:#f8fbff">#F8FBFF</span>
+          </div>
+          <div class="body">
+            <div class="name">Container Low</div>
+            <div class="hex" style="color:#0f172a">--color-surface-container-low</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#eef3f8">
+            <span class="pair" style="background:#0f172a;color:#eef3f8">#EEF3F8</span>
+          </div>
+          <div class="body">
+            <div class="name">Container</div>
+            <div class="hex" style="color:#0f172a">--color-surface-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#e7edf4">
+            <span class="pair" style="background:#0f172a;color:#e7edf4">#E7EDF4</span>
+          </div>
+          <div class="body">
+            <div class="name">Container High</div>
+            <div class="hex" style="color:#0f172a">--color-surface-container-high</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#dfe7f0">
+            <span class="pair" style="background:#0f172a;color:#dfe7f0">#DFE7F0</span>
+          </div>
+          <div class="body">
+            <div class="name">Container Highest</div>
+            <div class="hex" style="color:#0f172a">--color-surface-container-highest</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#e2e7ef">
+            <span class="pair" style="background:#0f172a;color:#e2e7ef">#E2E7EF</span>
+          </div>
+          <div class="body">
+            <div class="name">Surface Variant</div>
+            <div class="hex" style="color:#0f172a">--color-surface-variant</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#6e5e00">
+            <span class="pair" style="background:#ffffff;color:#6e5e00">#6E5E00</span>
+          </div>
+          <div class="body">
+            <div class="name">Surface Tint</div>
+            <div class="hex" style="color:#0f172a">--color-surface-tint</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#1f2937">
+            <span class="pair" style="background:#ffffff;color:#1f2937">#1F2937</span>
+          </div>
+          <div class="body">
+            <div class="name">Inverse Surface</div>
+            <div class="hex" style="color:#0f172a">--color-inverse-surface</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#f8fafc">
+            <span class="pair" style="background:#0f172a;color:#f8fafc">#F8FAFC</span>
+          </div>
+          <div class="body">
+            <div class="name">Inverse On Surface</div>
+            <div class="hex" style="color:#0f172a">--color-inverse-on-surface</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#8b98aa">
+            <span class="pair" style="background:#0f172a;color:#8b98aa">#8B98AA</span>
+          </div>
+          <div class="body">
+            <div class="name">Outline</div>
+            <div class="hex" style="color:#0f172a">--color-outline</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#d6dde6">
+            <span class="pair" style="background:#0f172a;color:#d6dde6">#D6DDE6</span>
+          </div>
+          <div class="body">
+            <div class="name">Outline Variant</div>
+            <div class="hex" style="color:#0f172a">--color-outline-variant</div>
+          </div>
+        </div>
+    </div>
+    <div class="group-title">Status · Semantic (Ops)</div>
+    <div class="grid">
+        <div class="swatch">
+          <div class="chip" style="background:#2e7d32">
+            <span class="pair" style="background:#ffffff;color:#2e7d32">#2E7D32</span>
+          </div>
+          <div class="body">
+            <div class="name">Safe</div>
+            <div class="hex" style="color:#0f172a">--color-safe</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ffffff">
+            <span class="pair" style="background:#0f172a;color:#ffffff">#FFFFFF</span>
+          </div>
+          <div class="body">
+            <div class="name">Safe Foreground</div>
+            <div class="hex" style="color:#0f172a">--color-safe-foreground</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#d7eddb">
+            <span class="pair" style="background:#0f172a;color:#d7eddb">#D7EDDB</span>
+          </div>
+          <div class="body">
+            <div class="name">Safe Container</div>
+            <div class="hex" style="color:#0f172a">--color-safe-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#1b5e20">
+            <span class="pair" style="background:#ffffff;color:#1b5e20">#1B5E20</span>
+          </div>
+          <div class="body">
+            <div class="name">On Safe Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-safe-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#b76f00">
+            <span class="pair" style="background:#ffffff;color:#b76f00">#B76F00</span>
+          </div>
+          <div class="body">
+            <div class="name">Warning</div>
+            <div class="hex" style="color:#0f172a">--color-warning</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ffffff">
+            <span class="pair" style="background:#0f172a;color:#ffffff">#FFFFFF</span>
+          </div>
+          <div class="body">
+            <div class="name">Warning Foreground</div>
+            <div class="hex" style="color:#0f172a">--color-warning-foreground</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#fff3cd">
+            <span class="pair" style="background:#0f172a;color:#fff3cd">#FFF3CD</span>
+          </div>
+          <div class="body">
+            <div class="name">Warning Container</div>
+            <div class="hex" style="color:#0f172a">--color-warning-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#6c4500">
+            <span class="pair" style="background:#ffffff;color:#6c4500">#6C4500</span>
+          </div>
+          <div class="body">
+            <div class="name">On Warning Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-warning-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ba1a1a">
+            <span class="pair" style="background:#ffffff;color:#ba1a1a">#BA1A1A</span>
+          </div>
+          <div class="body">
+            <div class="name">Danger</div>
+            <div class="hex" style="color:#0f172a">--color-danger</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ffffff">
+            <span class="pair" style="background:#0f172a;color:#ffffff">#FFFFFF</span>
+          </div>
+          <div class="body">
+            <div class="name">Danger Foreground</div>
+            <div class="hex" style="color:#0f172a">--color-danger-foreground</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ffdad6">
+            <span class="pair" style="background:#0f172a;color:#ffdad6">#FFDAD6</span>
+          </div>
+          <div class="body">
+            <div class="name">Danger Container</div>
+            <div class="hex" style="color:#0f172a">--color-danger-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#93000a">
+            <span class="pair" style="background:#ffffff;color:#93000a">#93000A</span>
+          </div>
+          <div class="body">
+            <div class="name">On Danger Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-danger-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ba1a1a">
+            <span class="pair" style="background:#ffffff;color:#ba1a1a">#BA1A1A</span>
+          </div>
+          <div class="body">
+            <div class="name">Error</div>
+            <div class="hex" style="color:#0f172a">--color-error</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ffffff">
+            <span class="pair" style="background:#0f172a;color:#ffffff">#FFFFFF</span>
+          </div>
+          <div class="body">
+            <div class="name">On Error</div>
+            <div class="hex" style="color:#0f172a">--color-on-error</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ffdad6">
+            <span class="pair" style="background:#0f172a;color:#ffdad6">#FFDAD6</span>
+          </div>
+          <div class="body">
+            <div class="name">Error Container</div>
+            <div class="hex" style="color:#0f172a">--color-error-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#93000a">
+            <span class="pair" style="background:#ffffff;color:#93000a">#93000A</span>
+          </div>
+          <div class="body">
+            <div class="name">On Error Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-error-container</div>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <section class="theme-section">
+    <div class="theme-head"><span class="dot" style="background:#f7d54a"></span><h2>Dark</h2></div>
+    <p class="theme-desc">Nền navy đậm (#08111f), primary Gold sáng — dùng buổi tối / màn hình tối.</p>
+    <div class="group-title">Brand · Primary (Gold)</div>
+    <div class="grid">
+        <div class="swatch">
+          <div class="chip" style="background:#f7d54a">
+            <span class="pair" style="background:#0f172a;color:#f7d54a">#F7D54A</span>
+          </div>
+          <div class="body">
+            <div class="name">Primary</div>
+            <div class="hex" style="color:#0f172a">--color-primary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#1d1700">
+            <span class="pair" style="background:#ffffff;color:#1d1700">#1D1700</span>
+          </div>
+          <div class="body">
+            <div class="name">On Primary</div>
+            <div class="hex" style="color:#0f172a">--color-on-primary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#f2cd36">
+            <span class="pair" style="background:#0f172a;color:#f2cd36">#F2CD36</span>
+          </div>
+          <div class="body">
+            <div class="name">Primary Container</div>
+            <div class="hex" style="color:#0f172a">--color-primary-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#1d1700">
+            <span class="pair" style="background:#ffffff;color:#1d1700">#1D1700</span>
+          </div>
+          <div class="body">
+            <div class="name">On Primary Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-primary-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#6e5e00">
+            <span class="pair" style="background:#ffffff;color:#6e5e00">#6E5E00</span>
+          </div>
+          <div class="body">
+            <div class="name">Inverse Primary</div>
+            <div class="hex" style="color:#0f172a">--color-inverse-primary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ffe98d">
+            <span class="pair" style="background:#0f172a;color:#ffe98d">#FFE98D</span>
+          </div>
+          <div class="body">
+            <div class="name">Primary Fixed</div>
+            <div class="hex" style="color:#0f172a">--color-primary-fixed</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#f2cd36">
+            <span class="pair" style="background:#0f172a;color:#f2cd36">#F2CD36</span>
+          </div>
+          <div class="body">
+            <div class="name">Primary Fixed Dim</div>
+            <div class="hex" style="color:#0f172a">--color-primary-fixed-dim</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#1d1700">
+            <span class="pair" style="background:#ffffff;color:#1d1700">#1D1700</span>
+          </div>
+          <div class="body">
+            <div class="name">On Primary Fixed</div>
+            <div class="hex" style="color:#0f172a">--color-on-primary-fixed</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#5b4c00">
+            <span class="pair" style="background:#ffffff;color:#5b4c00">#5B4C00</span>
+          </div>
+          <div class="body">
+            <div class="name">On Primary Fixed Variant</div>
+            <div class="hex" style="color:#0f172a">--color-on-primary-fixed-variant</div>
+          </div>
+        </div>
+    </div>
+    <div class="group-title">Brand · Secondary (Navy)</div>
+    <div class="grid">
+        <div class="swatch">
+          <div class="chip" style="background:#8dbbff">
+            <span class="pair" style="background:#0f172a;color:#8dbbff">#8DBBFF</span>
+          </div>
+          <div class="body">
+            <div class="name">Secondary</div>
+            <div class="hex" style="color:#0f172a">--color-secondary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#08203f">
+            <span class="pair" style="background:#ffffff;color:#08203f">#08203F</span>
+          </div>
+          <div class="body">
+            <div class="name">On Secondary</div>
+            <div class="hex" style="color:#0f172a">--color-on-secondary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#153b6a">
+            <span class="pair" style="background:#ffffff;color:#153b6a">#153B6A</span>
+          </div>
+          <div class="body">
+            <div class="name">Secondary Container</div>
+            <div class="hex" style="color:#0f172a">--color-secondary-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#dce9ff">
+            <span class="pair" style="background:#0f172a;color:#dce9ff">#DCE9FF</span>
+          </div>
+          <div class="body">
+            <div class="name">On Secondary Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-secondary-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#d6e3ff">
+            <span class="pair" style="background:#0f172a;color:#d6e3ff">#D6E3FF</span>
+          </div>
+          <div class="body">
+            <div class="name">Secondary Fixed</div>
+            <div class="hex" style="color:#0f172a">--color-secondary-fixed</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#8dbbff">
+            <span class="pair" style="background:#0f172a;color:#8dbbff">#8DBBFF</span>
+          </div>
+          <div class="body">
+            <div class="name">Secondary Fixed Dim</div>
+            <div class="hex" style="color:#0f172a">--color-secondary-fixed-dim</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#001b3c">
+            <span class="pair" style="background:#ffffff;color:#001b3c">#001B3C</span>
+          </div>
+          <div class="body">
+            <div class="name">On Secondary Fixed</div>
+            <div class="hex" style="color:#0f172a">--color-on-secondary-fixed</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#0b3e76">
+            <span class="pair" style="background:#ffffff;color:#0b3e76">#0B3E76</span>
+          </div>
+          <div class="body">
+            <div class="name">On Secondary Fixed Variant</div>
+            <div class="hex" style="color:#0f172a">--color-on-secondary-fixed-variant</div>
+          </div>
+        </div>
+    </div>
+    <div class="group-title">Tertiary</div>
+    <div class="grid">
+        <div class="swatch">
+          <div class="chip" style="background:#8db4ff">
+            <span class="pair" style="background:#0f172a;color:#8db4ff">#8DB4FF</span>
+          </div>
+          <div class="body">
+            <div class="name">Tertiary</div>
+            <div class="hex" style="color:#0f172a">--color-tertiary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#08203f">
+            <span class="pair" style="background:#ffffff;color:#08203f">#08203F</span>
+          </div>
+          <div class="body">
+            <div class="name">On Tertiary</div>
+            <div class="hex" style="color:#0f172a">--color-on-tertiary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#1d3d66">
+            <span class="pair" style="background:#ffffff;color:#1d3d66">#1D3D66</span>
+          </div>
+          <div class="body">
+            <div class="name">Tertiary Container</div>
+            <div class="hex" style="color:#0f172a">--color-tertiary-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#dce8ff">
+            <span class="pair" style="background:#0f172a;color:#dce8ff">#DCE8FF</span>
+          </div>
+          <div class="body">
+            <div class="name">On Tertiary Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-tertiary-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#d5e3ff">
+            <span class="pair" style="background:#0f172a;color:#d5e3ff">#D5E3FF</span>
+          </div>
+          <div class="body">
+            <div class="name">Tertiary Fixed</div>
+            <div class="hex" style="color:#0f172a">--color-tertiary-fixed</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#8db4ff">
+            <span class="pair" style="background:#0f172a;color:#8db4ff">#8DB4FF</span>
+          </div>
+          <div class="body">
+            <div class="name">Tertiary Fixed Dim</div>
+            <div class="hex" style="color:#0f172a">--color-tertiary-fixed-dim</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#001c3b">
+            <span class="pair" style="background:#ffffff;color:#001c3b">#001C3B</span>
+          </div>
+          <div class="body">
+            <div class="name">On Tertiary Fixed</div>
+            <div class="hex" style="color:#0f172a">--color-on-tertiary-fixed</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#204d85">
+            <span class="pair" style="background:#ffffff;color:#204d85">#204D85</span>
+          </div>
+          <div class="body">
+            <div class="name">On Tertiary Fixed Variant</div>
+            <div class="hex" style="color:#0f172a">--color-on-tertiary-fixed-variant</div>
+          </div>
+        </div>
+    </div>
+    <div class="group-title">Surface & Background</div>
+    <div class="grid">
+        <div class="swatch">
+          <div class="chip" style="background:#08111f">
+            <span class="pair" style="background:#ffffff;color:#08111f">#08111F</span>
+          </div>
+          <div class="body">
+            <div class="name">Background</div>
+            <div class="hex" style="color:#0f172a">--color-background</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#edf4ff">
+            <span class="pair" style="background:#0f172a;color:#edf4ff">#EDF4FF</span>
+          </div>
+          <div class="body">
+            <div class="name">On Background</div>
+            <div class="hex" style="color:#0f172a">--color-on-background</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#08111f">
+            <span class="pair" style="background:#ffffff;color:#08111f">#08111F</span>
+          </div>
+          <div class="body">
+            <div class="name">Surface</div>
+            <div class="hex" style="color:#0f172a">--color-surface</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#edf4ff">
+            <span class="pair" style="background:#0f172a;color:#edf4ff">#EDF4FF</span>
+          </div>
+          <div class="body">
+            <div class="name">On Surface</div>
+            <div class="hex" style="color:#0f172a">--color-on-surface</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#9aaec5">
+            <span class="pair" style="background:#0f172a;color:#9aaec5">#9AAEC5</span>
+          </div>
+          <div class="body">
+            <div class="name">On Surface Variant</div>
+            <div class="hex" style="color:#0f172a">--color-on-surface-variant</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#0d1728">
+            <span class="pair" style="background:#ffffff;color:#0d1728">#0D1728</span>
+          </div>
+          <div class="body">
+            <div class="name">Surface Dim</div>
+            <div class="hex" style="color:#0f172a">--color-surface-dim</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#101b2d">
+            <span class="pair" style="background:#ffffff;color:#101b2d">#101B2D</span>
+          </div>
+          <div class="body">
+            <div class="name">Surface Bright</div>
+            <div class="hex" style="color:#0f172a">--color-surface-bright</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#0f172a">
+            <span class="pair" style="background:#ffffff;color:#0f172a">#0F172A</span>
+          </div>
+          <div class="body">
+            <div class="name">Container Lowest</div>
+            <div class="hex" style="color:#0f172a">--color-surface-container-lowest</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#111c31">
+            <span class="pair" style="background:#ffffff;color:#111c31">#111C31</span>
+          </div>
+          <div class="body">
+            <div class="name">Container Low</div>
+            <div class="hex" style="color:#0f172a">--color-surface-container-low</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#162236">
+            <span class="pair" style="background:#ffffff;color:#162236">#162236</span>
+          </div>
+          <div class="body">
+            <div class="name">Container</div>
+            <div class="hex" style="color:#0f172a">--color-surface-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#1c2a41">
+            <span class="pair" style="background:#ffffff;color:#1c2a41">#1C2A41</span>
+          </div>
+          <div class="body">
+            <div class="name">Container High</div>
+            <div class="hex" style="color:#0f172a">--color-surface-container-high</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#24344d">
+            <span class="pair" style="background:#ffffff;color:#24344d">#24344D</span>
+          </div>
+          <div class="body">
+            <div class="name">Container Highest</div>
+            <div class="hex" style="color:#0f172a">--color-surface-container-highest</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#223149">
+            <span class="pair" style="background:#ffffff;color:#223149">#223149</span>
+          </div>
+          <div class="body">
+            <div class="name">Surface Variant</div>
+            <div class="hex" style="color:#0f172a">--color-surface-variant</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#f7d54a">
+            <span class="pair" style="background:#0f172a;color:#f7d54a">#F7D54A</span>
+          </div>
+          <div class="body">
+            <div class="name">Surface Tint</div>
+            <div class="hex" style="color:#0f172a">--color-surface-tint</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#eef4fb">
+            <span class="pair" style="background:#0f172a;color:#eef4fb">#EEF4FB</span>
+          </div>
+          <div class="body">
+            <div class="name">Inverse Surface</div>
+            <div class="hex" style="color:#0f172a">--color-inverse-surface</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#0f172a">
+            <span class="pair" style="background:#ffffff;color:#0f172a">#0F172A</span>
+          </div>
+          <div class="body">
+            <div class="name">Inverse On Surface</div>
+            <div class="hex" style="color:#0f172a">--color-inverse-on-surface</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#51627c">
+            <span class="pair" style="background:#ffffff;color:#51627c">#51627C</span>
+          </div>
+          <div class="body">
+            <div class="name">Outline</div>
+            <div class="hex" style="color:#0f172a">--color-outline</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#31435f">
+            <span class="pair" style="background:#ffffff;color:#31435f">#31435F</span>
+          </div>
+          <div class="body">
+            <div class="name">Outline Variant</div>
+            <div class="hex" style="color:#0f172a">--color-outline-variant</div>
+          </div>
+        </div>
+    </div>
+    <div class="group-title">Status · Semantic (Ops)</div>
+    <div class="grid">
+        <div class="swatch">
+          <div class="chip" style="background:#67d185">
+            <span class="pair" style="background:#0f172a;color:#67d185">#67D185</span>
+          </div>
+          <div class="body">
+            <div class="name">Safe</div>
+            <div class="hex" style="color:#0f172a">--color-safe</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#082212">
+            <span class="pair" style="background:#ffffff;color:#082212">#082212</span>
+          </div>
+          <div class="body">
+            <div class="name">Safe Foreground</div>
+            <div class="hex" style="color:#0f172a">--color-safe-foreground</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#173b26">
+            <span class="pair" style="background:#ffffff;color:#173b26">#173B26</span>
+          </div>
+          <div class="body">
+            <div class="name">Safe Container</div>
+            <div class="hex" style="color:#0f172a">--color-safe-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#dbf8e3">
+            <span class="pair" style="background:#0f172a;color:#dbf8e3">#DBF8E3</span>
+          </div>
+          <div class="body">
+            <div class="name">On Safe Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-safe-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#f7ba52">
+            <span class="pair" style="background:#0f172a;color:#f7ba52">#F7BA52</span>
+          </div>
+          <div class="body">
+            <div class="name">Warning</div>
+            <div class="hex" style="color:#0f172a">--color-warning</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#2b1800">
+            <span class="pair" style="background:#ffffff;color:#2b1800">#2B1800</span>
+          </div>
+          <div class="body">
+            <div class="name">Warning Foreground</div>
+            <div class="hex" style="color:#0f172a">--color-warning-foreground</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#49300b">
+            <span class="pair" style="background:#ffffff;color:#49300b">#49300B</span>
+          </div>
+          <div class="body">
+            <div class="name">Warning Container</div>
+            <div class="hex" style="color:#0f172a">--color-warning-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ffebc7">
+            <span class="pair" style="background:#0f172a;color:#ffebc7">#FFEBC7</span>
+          </div>
+          <div class="body">
+            <div class="name">On Warning Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-warning-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ff908a">
+            <span class="pair" style="background:#0f172a;color:#ff908a">#FF908A</span>
+          </div>
+          <div class="body">
+            <div class="name">Danger</div>
+            <div class="hex" style="color:#0f172a">--color-danger</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#3f0004">
+            <span class="pair" style="background:#ffffff;color:#3f0004">#3F0004</span>
+          </div>
+          <div class="body">
+            <div class="name">Danger Foreground</div>
+            <div class="hex" style="color:#0f172a">--color-danger-foreground</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#602427">
+            <span class="pair" style="background:#ffffff;color:#602427">#602427</span>
+          </div>
+          <div class="body">
+            <div class="name">Danger Container</div>
+            <div class="hex" style="color:#0f172a">--color-danger-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ffd9d6">
+            <span class="pair" style="background:#0f172a;color:#ffd9d6">#FFD9D6</span>
+          </div>
+          <div class="body">
+            <div class="name">On Danger Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-danger-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ff908a">
+            <span class="pair" style="background:#0f172a;color:#ff908a">#FF908A</span>
+          </div>
+          <div class="body">
+            <div class="name">Error</div>
+            <div class="hex" style="color:#0f172a">--color-error</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#3f0004">
+            <span class="pair" style="background:#ffffff;color:#3f0004">#3F0004</span>
+          </div>
+          <div class="body">
+            <div class="name">On Error</div>
+            <div class="hex" style="color:#0f172a">--color-on-error</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#602427">
+            <span class="pair" style="background:#ffffff;color:#602427">#602427</span>
+          </div>
+          <div class="body">
+            <div class="name">Error Container</div>
+            <div class="hex" style="color:#0f172a">--color-error-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ffd9d6">
+            <span class="pair" style="background:#0f172a;color:#ffd9d6">#FFD9D6</span>
+          </div>
+          <div class="body">
+            <div class="name">On Error Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-error-container</div>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <section class="theme-section">
+    <div class="theme-head"><span class="dot" style="background:#f472b6"></span><h2>Neon</h2></div>
+    <p class="theme-desc">AI-Neon Synthwave trên nền near-black — Magenta × Cyan × Violet, hiệu ứng aurora glow.</p>
+    <div class="group-title">Brand · Primary (Gold)</div>
+    <div class="grid">
+        <div class="swatch">
+          <div class="chip" style="background:#f472b6">
+            <span class="pair" style="background:#0f172a;color:#f472b6">#F472B6</span>
+          </div>
+          <div class="body">
+            <div class="name">Primary</div>
+            <div class="hex" style="color:#0f172a">--color-primary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#2a0a1c">
+            <span class="pair" style="background:#ffffff;color:#2a0a1c">#2A0A1C</span>
+          </div>
+          <div class="body">
+            <div class="name">On Primary</div>
+            <div class="hex" style="color:#0f172a">--color-on-primary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#f472b6">
+            <span class="pair" style="background:#0f172a;color:#f472b6">#F472B6</span>
+          </div>
+          <div class="body">
+            <div class="name">Primary Container</div>
+            <div class="hex" style="color:#0f172a">--color-primary-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#2e0a1d">
+            <span class="pair" style="background:#ffffff;color:#2e0a1d">#2E0A1D</span>
+          </div>
+          <div class="body">
+            <div class="name">On Primary Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-primary-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#c21e86">
+            <span class="pair" style="background:#ffffff;color:#c21e86">#C21E86</span>
+          </div>
+          <div class="body">
+            <div class="name">Inverse Primary</div>
+            <div class="hex" style="color:#0f172a">--color-inverse-primary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ff9ed4">
+            <span class="pair" style="background:#0f172a;color:#ff9ed4">#FF9ED4</span>
+          </div>
+          <div class="body">
+            <div class="name">Primary Fixed</div>
+            <div class="hex" style="color:#0f172a">--color-primary-fixed</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ff8ac9">
+            <span class="pair" style="background:#0f172a;color:#ff8ac9">#FF8AC9</span>
+          </div>
+          <div class="body">
+            <div class="name">Primary Fixed Dim</div>
+            <div class="hex" style="color:#0f172a">--color-primary-fixed-dim</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#2e0a1d">
+            <span class="pair" style="background:#ffffff;color:#2e0a1d">#2E0A1D</span>
+          </div>
+          <div class="body">
+            <div class="name">On Primary Fixed</div>
+            <div class="hex" style="color:#0f172a">--color-on-primary-fixed</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#6e1450">
+            <span class="pair" style="background:#ffffff;color:#6e1450">#6E1450</span>
+          </div>
+          <div class="body">
+            <div class="name">On Primary Fixed Variant</div>
+            <div class="hex" style="color:#0f172a">--color-on-primary-fixed-variant</div>
+          </div>
+        </div>
+    </div>
+    <div class="group-title">Brand · Secondary (Navy)</div>
+    <div class="grid">
+        <div class="swatch">
+          <div class="chip" style="background:#34d2e6">
+            <span class="pair" style="background:#0f172a;color:#34d2e6">#34D2E6</span>
+          </div>
+          <div class="body">
+            <div class="name">Secondary</div>
+            <div class="hex" style="color:#0f172a">--color-secondary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#042e36">
+            <span class="pair" style="background:#ffffff;color:#042e36">#042E36</span>
+          </div>
+          <div class="body">
+            <div class="name">On Secondary</div>
+            <div class="hex" style="color:#0f172a">--color-on-secondary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#0c4a57">
+            <span class="pair" style="background:#ffffff;color:#0c4a57">#0C4A57</span>
+          </div>
+          <div class="body">
+            <div class="name">Secondary Container</div>
+            <div class="hex" style="color:#0f172a">--color-secondary-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#b8f1fb">
+            <span class="pair" style="background:#0f172a;color:#b8f1fb">#B8F1FB</span>
+          </div>
+          <div class="body">
+            <div class="name">On Secondary Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-secondary-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#b8f1fb">
+            <span class="pair" style="background:#0f172a;color:#b8f1fb">#B8F1FB</span>
+          </div>
+          <div class="body">
+            <div class="name">Secondary Fixed</div>
+            <div class="hex" style="color:#0f172a">--color-secondary-fixed</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#5fe0ef">
+            <span class="pair" style="background:#0f172a;color:#5fe0ef">#5FE0EF</span>
+          </div>
+          <div class="body">
+            <div class="name">Secondary Fixed Dim</div>
+            <div class="hex" style="color:#0f172a">--color-secondary-fixed-dim</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#00232b">
+            <span class="pair" style="background:#ffffff;color:#00232b">#00232B</span>
+          </div>
+          <div class="body">
+            <div class="name">On Secondary Fixed</div>
+            <div class="hex" style="color:#0f172a">--color-on-secondary-fixed</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#0a5867">
+            <span class="pair" style="background:#ffffff;color:#0a5867">#0A5867</span>
+          </div>
+          <div class="body">
+            <div class="name">On Secondary Fixed Variant</div>
+            <div class="hex" style="color:#0f172a">--color-on-secondary-fixed-variant</div>
+          </div>
+        </div>
+    </div>
+    <div class="group-title">Tertiary</div>
+    <div class="grid">
+        <div class="swatch">
+          <div class="chip" style="background:#b69dff">
+            <span class="pair" style="background:#0f172a;color:#b69dff">#B69DFF</span>
+          </div>
+          <div class="body">
+            <div class="name">Tertiary</div>
+            <div class="hex" style="color:#0f172a">--color-tertiary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#1c1147">
+            <span class="pair" style="background:#ffffff;color:#1c1147">#1C1147</span>
+          </div>
+          <div class="body">
+            <div class="name">On Tertiary</div>
+            <div class="hex" style="color:#0f172a">--color-on-tertiary</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#3b2c73">
+            <span class="pair" style="background:#ffffff;color:#3b2c73">#3B2C73</span>
+          </div>
+          <div class="body">
+            <div class="name">Tertiary Container</div>
+            <div class="hex" style="color:#0f172a">--color-tertiary-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#e7deff">
+            <span class="pair" style="background:#0f172a;color:#e7deff">#E7DEFF</span>
+          </div>
+          <div class="body">
+            <div class="name">On Tertiary Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-tertiary-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#e7deff">
+            <span class="pair" style="background:#0f172a;color:#e7deff">#E7DEFF</span>
+          </div>
+          <div class="body">
+            <div class="name">Tertiary Fixed</div>
+            <div class="hex" style="color:#0f172a">--color-tertiary-fixed</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#c2aeff">
+            <span class="pair" style="background:#0f172a;color:#c2aeff">#C2AEFF</span>
+          </div>
+          <div class="body">
+            <div class="name">Tertiary Fixed Dim</div>
+            <div class="hex" style="color:#0f172a">--color-tertiary-fixed-dim</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#160a3d">
+            <span class="pair" style="background:#ffffff;color:#160a3d">#160A3D</span>
+          </div>
+          <div class="body">
+            <div class="name">On Tertiary Fixed</div>
+            <div class="hex" style="color:#0f172a">--color-on-tertiary-fixed</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#4a3a85">
+            <span class="pair" style="background:#ffffff;color:#4a3a85">#4A3A85</span>
+          </div>
+          <div class="body">
+            <div class="name">On Tertiary Fixed Variant</div>
+            <div class="hex" style="color:#0f172a">--color-on-tertiary-fixed-variant</div>
+          </div>
+        </div>
+    </div>
+    <div class="group-title">Surface & Background</div>
+    <div class="grid">
+        <div class="swatch">
+          <div class="chip" style="background:#0b0a14">
+            <span class="pair" style="background:#ffffff;color:#0b0a14">#0B0A14</span>
+          </div>
+          <div class="body">
+            <div class="name">Background</div>
+            <div class="hex" style="color:#0f172a">--color-background</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#f4f2fb">
+            <span class="pair" style="background:#0f172a;color:#f4f2fb">#F4F2FB</span>
+          </div>
+          <div class="body">
+            <div class="name">On Background</div>
+            <div class="hex" style="color:#0f172a">--color-on-background</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#0b0a14">
+            <span class="pair" style="background:#ffffff;color:#0b0a14">#0B0A14</span>
+          </div>
+          <div class="body">
+            <div class="name">Surface</div>
+            <div class="hex" style="color:#0f172a">--color-surface</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#f4f2fb">
+            <span class="pair" style="background:#0f172a;color:#f4f2fb">#F4F2FB</span>
+          </div>
+          <div class="body">
+            <div class="name">On Surface</div>
+            <div class="hex" style="color:#0f172a">--color-on-surface</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#aca6c6">
+            <span class="pair" style="background:#0f172a;color:#aca6c6">#ACA6C6</span>
+          </div>
+          <div class="body">
+            <div class="name">On Surface Variant</div>
+            <div class="hex" style="color:#0f172a">--color-on-surface-variant</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#08070f">
+            <span class="pair" style="background:#ffffff;color:#08070f">#08070F</span>
+          </div>
+          <div class="body">
+            <div class="name">Surface Dim</div>
+            <div class="hex" style="color:#0f172a">--color-surface-dim</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#17131f">
+            <span class="pair" style="background:#ffffff;color:#17131f">#17131F</span>
+          </div>
+          <div class="body">
+            <div class="name">Surface Bright</div>
+            <div class="hex" style="color:#0f172a">--color-surface-bright</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#100d18">
+            <span class="pair" style="background:#ffffff;color:#100d18">#100D18</span>
+          </div>
+          <div class="body">
+            <div class="name">Container Lowest</div>
+            <div class="hex" style="color:#0f172a">--color-surface-container-lowest</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#14111e">
+            <span class="pair" style="background:#ffffff;color:#14111e">#14111E</span>
+          </div>
+          <div class="body">
+            <div class="name">Container Low</div>
+            <div class="hex" style="color:#0f172a">--color-surface-container-low</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#1a1626">
+            <span class="pair" style="background:#ffffff;color:#1a1626">#1A1626</span>
+          </div>
+          <div class="body">
+            <div class="name">Container</div>
+            <div class="hex" style="color:#0f172a">--color-surface-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#221c32">
+            <span class="pair" style="background:#ffffff;color:#221c32">#221C32</span>
+          </div>
+          <div class="body">
+            <div class="name">Container High</div>
+            <div class="hex" style="color:#0f172a">--color-surface-container-high</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#2b2440">
+            <span class="pair" style="background:#ffffff;color:#2b2440">#2B2440</span>
+          </div>
+          <div class="body">
+            <div class="name">Container Highest</div>
+            <div class="hex" style="color:#0f172a">--color-surface-container-highest</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#241f35">
+            <span class="pair" style="background:#ffffff;color:#241f35">#241F35</span>
+          </div>
+          <div class="body">
+            <div class="name">Surface Variant</div>
+            <div class="hex" style="color:#0f172a">--color-surface-variant</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#f472b6">
+            <span class="pair" style="background:#0f172a;color:#f472b6">#F472B6</span>
+          </div>
+          <div class="body">
+            <div class="name">Surface Tint</div>
+            <div class="hex" style="color:#0f172a">--color-surface-tint</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ece9f8">
+            <span class="pair" style="background:#0f172a;color:#ece9f8">#ECE9F8</span>
+          </div>
+          <div class="body">
+            <div class="name">Inverse Surface</div>
+            <div class="hex" style="color:#0f172a">--color-inverse-surface</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#14111e">
+            <span class="pair" style="background:#ffffff;color:#14111e">#14111E</span>
+          </div>
+          <div class="body">
+            <div class="name">Inverse On Surface</div>
+            <div class="hex" style="color:#0f172a">--color-inverse-on-surface</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#6a6388">
+            <span class="pair" style="background:#ffffff;color:#6a6388">#6A6388</span>
+          </div>
+          <div class="body">
+            <div class="name">Outline</div>
+            <div class="hex" style="color:#0f172a">--color-outline</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#383152">
+            <span class="pair" style="background:#ffffff;color:#383152">#383152</span>
+          </div>
+          <div class="body">
+            <div class="name">Outline Variant</div>
+            <div class="hex" style="color:#0f172a">--color-outline-variant</div>
+          </div>
+        </div>
+    </div>
+    <div class="group-title">Status · Semantic (Ops)</div>
+    <div class="grid">
+        <div class="swatch">
+          <div class="chip" style="background:#3fe0a0">
+            <span class="pair" style="background:#0f172a;color:#3fe0a0">#3FE0A0</span>
+          </div>
+          <div class="body">
+            <div class="name">Safe</div>
+            <div class="hex" style="color:#0f172a">--color-safe</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#04231a">
+            <span class="pair" style="background:#ffffff;color:#04231a">#04231A</span>
+          </div>
+          <div class="body">
+            <div class="name">Safe Foreground</div>
+            <div class="hex" style="color:#0f172a">--color-safe-foreground</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#0e3d2c">
+            <span class="pair" style="background:#ffffff;color:#0e3d2c">#0E3D2C</span>
+          </div>
+          <div class="body">
+            <div class="name">Safe Container</div>
+            <div class="hex" style="color:#0f172a">--color-safe-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#c5f8e2">
+            <span class="pair" style="background:#0f172a;color:#c5f8e2">#C5F8E2</span>
+          </div>
+          <div class="body">
+            <div class="name">On Safe Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-safe-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#fbbf5a">
+            <span class="pair" style="background:#0f172a;color:#fbbf5a">#FBBF5A</span>
+          </div>
+          <div class="body">
+            <div class="name">Warning</div>
+            <div class="hex" style="color:#0f172a">--color-warning</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#2b1a00">
+            <span class="pair" style="background:#ffffff;color:#2b1a00">#2B1A00</span>
+          </div>
+          <div class="body">
+            <div class="name">Warning Foreground</div>
+            <div class="hex" style="color:#0f172a">--color-warning-foreground</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#4a3410">
+            <span class="pair" style="background:#ffffff;color:#4a3410">#4A3410</span>
+          </div>
+          <div class="body">
+            <div class="name">Warning Container</div>
+            <div class="hex" style="color:#0f172a">--color-warning-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ffe8c4">
+            <span class="pair" style="background:#0f172a;color:#ffe8c4">#FFE8C4</span>
+          </div>
+          <div class="body">
+            <div class="name">On Warning Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-warning-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ff7a90">
+            <span class="pair" style="background:#0f172a;color:#ff7a90">#FF7A90</span>
+          </div>
+          <div class="body">
+            <div class="name">Danger</div>
+            <div class="hex" style="color:#0f172a">--color-danger</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#3f0010">
+            <span class="pair" style="background:#ffffff;color:#3f0010">#3F0010</span>
+          </div>
+          <div class="body">
+            <div class="name">Danger Foreground</div>
+            <div class="hex" style="color:#0f172a">--color-danger-foreground</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#5c1726">
+            <span class="pair" style="background:#ffffff;color:#5c1726">#5C1726</span>
+          </div>
+          <div class="body">
+            <div class="name">Danger Container</div>
+            <div class="hex" style="color:#0f172a">--color-danger-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ffd9df">
+            <span class="pair" style="background:#0f172a;color:#ffd9df">#FFD9DF</span>
+          </div>
+          <div class="body">
+            <div class="name">On Danger Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-danger-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ff7a90">
+            <span class="pair" style="background:#0f172a;color:#ff7a90">#FF7A90</span>
+          </div>
+          <div class="body">
+            <div class="name">Error</div>
+            <div class="hex" style="color:#0f172a">--color-error</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#3f0010">
+            <span class="pair" style="background:#ffffff;color:#3f0010">#3F0010</span>
+          </div>
+          <div class="body">
+            <div class="name">On Error</div>
+            <div class="hex" style="color:#0f172a">--color-on-error</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#5c1726">
+            <span class="pair" style="background:#ffffff;color:#5c1726">#5C1726</span>
+          </div>
+          <div class="body">
+            <div class="name">Error Container</div>
+            <div class="hex" style="color:#0f172a">--color-error-container</div>
+          </div>
+        </div>
+        <div class="swatch">
+          <div class="chip" style="background:#ffd9df">
+            <span class="pair" style="background:#0f172a;color:#ffd9df">#FFD9DF</span>
+          </div>
+          <div class="body">
+            <div class="name">On Error Container</div>
+            <div class="hex" style="color:#0f172a">--color-on-error-container</div>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <footer>
+    <p><b>Cách dùng nhanh:</b> Click vào mã hex để bôi chọn và copy. Mỗi màu nền (<i>container / role</i>)
+    đi kèm màu chữ tương ứng (<i>on-…</i>) để đảm bảo độ tương phản WCAG AA — luôn dùng theo cặp.</p>
+    <p>File này tự đóng gói (single-file). Có thể mở trực tiếp bằng trình duyệt hoặc <b>In → Lưu thành PDF</b> để gửi.</p>
+  </footer>
+</div>
+</body>
+</html>

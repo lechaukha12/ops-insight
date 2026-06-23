@@ -64,6 +64,24 @@ export default function Dashboard() {
   const [copiedTraceId, setCopiedTraceId] = useState<string | null>(null);
   const [refreshInterval, setRefreshInterval] = useState(5000);
 
+  // Theme state management
+  const [theme, setTheme] = useState<'light' | 'dark' | 'neon'>(() => {
+    if (typeof window !== 'undefined') {
+      const savedTheme = localStorage.getItem('insight-theme') as 'light' | 'dark' | 'neon';
+      return savedTheme || 'dark';
+    }
+    return 'dark';
+  });
+
+  useEffect(() => {
+    document.documentElement.className = theme;
+  }, [theme]);
+
+  const handleThemeChange = (newTheme: 'light' | 'dark' | 'neon') => {
+    setTheme(newTheme);
+    localStorage.setItem('insight-theme', newTheme);
+  };
+
   // Trace details viewer states
   const [selectedTraceId, setSelectedTraceId] = useState<string | null>(null);
   const [traceSpans, setTraceSpans] = useState<Span[]>([]);
@@ -282,7 +300,12 @@ export default function Dashboard() {
     const topSigs = sortedSigs.slice(0, 4);
     const otherSigs = sortedSigs.slice(4);
 
-    const chartColors = ['#06b6d4', '#f43f5e', '#a5b4fc', '#f59e0b'];
+    const chartColors = [
+      'var(--color-primary)',
+      'var(--color-secondary)',
+      'var(--color-tertiary)',
+      'var(--color-warning)'
+    ];
     const chartData = topSigs.map((s, idx) => {
       const service = s.service_name;
       const api = s.endpoint_api.length > 25 ? `${s.endpoint_api.slice(0, 25)}...` : s.endpoint_api;
@@ -437,8 +460,8 @@ export default function Dashboard() {
         <svg className="chart-svg" viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet">
           <defs>
             <linearGradient id="chart-gradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#f43f5e" stopOpacity="0.35" />
-              <stop offset="100%" stopColor="#f43f5e" stopOpacity="0.0" />
+              <stop offset="0%" stopColor="var(--error-color)" stopOpacity="0.35" />
+              <stop offset="100%" stopColor="var(--error-color)" stopOpacity="0.0" />
             </linearGradient>
           </defs>
 
@@ -523,6 +546,18 @@ export default function Dashboard() {
           <div className="header-title">Dashboard vận hành và giám sát hệ thống</div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div className="refresh-select-container">
+            <span className="refresh-select-label">Theme:</span>
+            <select
+              value={theme}
+              onChange={(e) => handleThemeChange(e.target.value as 'light' | 'dark' | 'neon')}
+              className="refresh-select"
+            >
+              <option value="light">Light</option>
+              <option value="dark">Dark</option>
+              <option value="neon">Neon</option>
+            </select>
+          </div>
           <div className="refresh-select-container">
             <span className="refresh-select-label">Auto-Refresh:</span>
             <select

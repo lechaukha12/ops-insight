@@ -1,0 +1,221 @@
+/* ===================================================================
+   Bảng màu — Nam A Bank Knowhow Portal (Material 3)
+   Xuất ngày 23/06/2026 · nguồn: app/styles/tailwind.css
+   Light = :root · Dark = .dark · Neon = .neon
+   =================================================================== */
+
+/* LIGHT (mặc định) */
+:root {
+  /* Brand · Primary (Gold) */
+  --color-primary: #6e5e00;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #fcd800;
+  --color-on-primary-container: #6f5e00;
+  --color-inverse-primary: #e6c500;
+  --color-primary-fixed: #ffe25e;
+  --color-primary-fixed-dim: #e6c500;
+  --color-on-primary-fixed: #221b00;
+  --color-on-primary-fixed-variant: #534600;
+
+  /* Brand · Secondary (Navy) */
+  --color-secondary: #175eae;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #72a9ff;
+  --color-on-secondary-container: #003d79;
+  --color-secondary-fixed: #d6e3ff;
+  --color-secondary-fixed-dim: #a8c8ff;
+  --color-on-secondary-fixed: #001b3c;
+  --color-on-secondary-fixed-variant: #00468a;
+
+  /* Tertiary */
+  --color-tertiary: #355f97;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #c7dbff;
+  --color-on-tertiary-container: #366098;
+  --color-tertiary-fixed: #d5e3ff;
+  --color-tertiary-fixed-dim: #a6c8ff;
+  --color-on-tertiary-fixed: #001c3b;
+  --color-on-tertiary-fixed-variant: #18477e;
+
+  /* Surface & Background */
+  --color-background: #f5f8fc;
+  --color-on-background: #0f172a;
+  --color-surface: #f5f8fc;
+  --color-on-surface: #0f172a;
+  --color-on-surface-variant: #526072;
+  --color-surface-dim: #dde4ea;
+  --color-surface-bright: #fbfdff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f8fbff;
+  --color-surface-container: #eef3f8;
+  --color-surface-container-high: #e7edf4;
+  --color-surface-container-highest: #dfe7f0;
+  --color-surface-variant: #e2e7ef;
+  --color-surface-tint: #6e5e00;
+  --color-inverse-surface: #1f2937;
+  --color-inverse-on-surface: #f8fafc;
+  --color-outline: #8b98aa;
+  --color-outline-variant: #d6dde6;
+
+  /* Status · Semantic (Ops) */
+  --color-safe: #2e7d32;
+  --color-safe-foreground: #ffffff;
+  --color-safe-container: #d7eddb;
+  --color-on-safe-container: #1b5e20;
+  --color-warning: #b76f00;
+  --color-warning-foreground: #ffffff;
+  --color-warning-container: #fff3cd;
+  --color-on-warning-container: #6c4500;
+  --color-danger: #ba1a1a;
+  --color-danger-foreground: #ffffff;
+  --color-danger-container: #ffdad6;
+  --color-on-danger-container: #93000a;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+}
+
+/* DARK */
+.dark {
+  /* Brand · Primary (Gold) */
+  --color-primary: #f7d54a;
+  --color-on-primary: #1d1700;
+  --color-primary-container: #f2cd36;
+  --color-on-primary-container: #1d1700;
+  --color-inverse-primary: #6e5e00;
+  --color-primary-fixed: #ffe98d;
+  --color-primary-fixed-dim: #f2cd36;
+  --color-on-primary-fixed: #1d1700;
+  --color-on-primary-fixed-variant: #5b4c00;
+
+  /* Brand · Secondary (Navy) */
+  --color-secondary: #8dbbff;
+  --color-on-secondary: #08203f;
+  --color-secondary-container: #153b6a;
+  --color-on-secondary-container: #dce9ff;
+  --color-secondary-fixed: #d6e3ff;
+  --color-secondary-fixed-dim: #8dbbff;
+  --color-on-secondary-fixed: #001b3c;
+  --color-on-secondary-fixed-variant: #0b3e76;
+
+  /* Tertiary */
+  --color-tertiary: #8db4ff;
+  --color-on-tertiary: #08203f;
+  --color-tertiary-container: #1d3d66;
+  --color-on-tertiary-container: #dce8ff;
+  --color-tertiary-fixed: #d5e3ff;
+  --color-tertiary-fixed-dim: #8db4ff;
+  --color-on-tertiary-fixed: #001c3b;
+  --color-on-tertiary-fixed-variant: #204d85;
+
+  /* Surface & Background */
+  --color-background: #08111f;
+  --color-on-background: #edf4ff;
+  --color-surface: #08111f;
+  --color-on-surface: #edf4ff;
+  --color-on-surface-variant: #9aaec5;
+  --color-surface-dim: #0d1728;
+  --color-surface-bright: #101b2d;
+  --color-surface-container-lowest: #0f172a;
+  --color-surface-container-low: #111c31;
+  --color-surface-container: #162236;
+  --color-surface-container-high: #1c2a41;
+  --color-surface-container-highest: #24344d;
+  --color-surface-variant: #223149;
+  --color-surface-tint: #f7d54a;
+  --color-inverse-surface: #eef4fb;
+  --color-inverse-on-surface: #0f172a;
+  --color-outline: #51627c;
+  --color-outline-variant: #31435f;
+
+  /* Status · Semantic (Ops) */
+  --color-safe: #67d185;
+  --color-safe-foreground: #082212;
+  --color-safe-container: #173b26;
+  --color-on-safe-container: #dbf8e3;
+  --color-warning: #f7ba52;
+  --color-warning-foreground: #2b1800;
+  --color-warning-container: #49300b;
+  --color-on-warning-container: #ffebc7;
+  --color-danger: #ff908a;
+  --color-danger-foreground: #3f0004;
+  --color-danger-container: #602427;
+  --color-on-danger-container: #ffd9d6;
+  --color-error: #ff908a;
+  --color-on-error: #3f0004;
+  --color-error-container: #602427;
+  --color-on-error-container: #ffd9d6;
+}
+
+/* NEON */
+.neon {
+  /* Brand · Primary (Gold) */
+  --color-primary: #f472b6;
+  --color-on-primary: #2a0a1c;
+  --color-primary-container: #f472b6;
+  --color-on-primary-container: #2e0a1d;
+  --color-inverse-primary: #c21e86;
+  --color-primary-fixed: #ff9ed4;
+  --color-primary-fixed-dim: #ff8ac9;
+  --color-on-primary-fixed: #2e0a1d;
+  --color-on-primary-fixed-variant: #6e1450;
+
+  /* Brand · Secondary (Navy) */
+  --color-secondary: #34d2e6;
+  --color-on-secondary: #042e36;
+  --color-secondary-container: #0c4a57;
+  --color-on-secondary-container: #b8f1fb;
+  --color-secondary-fixed: #b8f1fb;
+  --color-secondary-fixed-dim: #5fe0ef;
+  --color-on-secondary-fixed: #00232b;
+  --color-on-secondary-fixed-variant: #0a5867;
+
+  /* Tertiary */
+  --color-tertiary: #b69dff;
+  --color-on-tertiary: #1c1147;
+  --color-tertiary-container: #3b2c73;
+  --color-on-tertiary-container: #e7deff;
+  --color-tertiary-fixed: #e7deff;
+  --color-tertiary-fixed-dim: #c2aeff;
+  --color-on-tertiary-fixed: #160a3d;
+  --color-on-tertiary-fixed-variant: #4a3a85;
+
+  /* Surface & Background */
+  --color-background: #0b0a14;
+  --color-on-background: #f4f2fb;
+  --color-surface: #0b0a14;
+  --color-on-surface: #f4f2fb;
+  --color-on-surface-variant: #aca6c6;
+  --color-surface-dim: #08070f;
+  --color-surface-bright: #17131f;
+  --color-surface-container-lowest: #100d18;
+  --color-surface-container-low: #14111e;
+  --color-surface-container: #1a1626;
+  --color-surface-container-high: #221c32;
+  --color-surface-container-highest: #2b2440;
+  --color-surface-variant: #241f35;
+  --color-surface-tint: #f472b6;
+  --color-inverse-surface: #ece9f8;
+  --color-inverse-on-surface: #14111e;
+  --color-outline: #6a6388;
+  --color-outline-variant: #383152;
+
+  /* Status · Semantic (Ops) */
+  --color-safe: #3fe0a0;
+  --color-safe-foreground: #04231a;
+  --color-safe-container: #0e3d2c;
+  --color-on-safe-container: #c5f8e2;
+  --color-warning: #fbbf5a;
+  --color-warning-foreground: #2b1a00;
+  --color-warning-container: #4a3410;
+  --color-on-warning-container: #ffe8c4;
+  --color-danger: #ff7a90;
+  --color-danger-foreground: #3f0010;
+  --color-danger-container: #5c1726;
+  --color-on-danger-container: #ffd9df;
+  --color-error: #ff7a90;
+  --color-on-error: #3f0010;
+  --color-error-container: #5c1726;
+  --color-on-error-container: #ffd9df;
+}
