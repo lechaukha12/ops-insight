@@ -66,7 +66,8 @@ export async function initDatabase() {
           endpoint_api String,
           error_message String,
           status_code String,
-          duration_ms Float64
+          duration_ms Float64,
+          INDEX idx_trace_id trace_id TYPE bloom_filter() GRANULARITY 1
         ) ENGINE = MergeTree()
         ORDER BY (timestamp, signature_id)
       `,
