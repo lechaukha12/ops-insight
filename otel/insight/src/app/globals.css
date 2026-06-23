@@ -103,12 +103,15 @@ body {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--card-border);
   color: var(--text-primary);
-  padding: 0.5rem 1rem;
+  padding: 0 1rem;
+  height: 38px;
+  box-sizing: border-box;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
+  font-size: 0.875rem;
   transition: all 0.2s ease;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.5rem;
 }
@@ -948,7 +951,9 @@ body {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid var(--card-border);
   color: var(--text-primary);
-  padding: 0.5rem 2rem 0.5rem 1rem;
+  padding: 0 2rem 0 1rem;
+  height: 38px;
+  box-sizing: border-box;
   border-radius: 6px;
   cursor: pointer;
   font-weight: 500;
