@@ -34,6 +34,17 @@ interface TimelinePoint {
   count: number;
 }
 
+interface Span {
+  span_id: string;
+  parent_span_id?: string;
+  service_name: string;
+  endpoint_api: string;
+  duration_ms: number;
+  error_message: string;
+  is_root_cause: boolean;
+  children?: Span[];
+}
+
 export default function Dashboard() {
   const [stats, setStats] = useState<Stats>({ totalSignatures: 0, totalErrors24h: 0, totalErrors1h: 0 });
   const [signatures, setSignatures] = useState<Signature[]>([]);
@@ -55,9 +66,9 @@ export default function Dashboard() {
 
   // Trace details viewer states
   const [selectedTraceId, setSelectedTraceId] = useState<string | null>(null);
-  const [traceSpans, setTraceSpans] = useState<any[]>([]);
+  const [traceSpans, setTraceSpans] = useState<Span[]>([]);
   const [loadingTrace, setLoadingTrace] = useState(false);
-  const [selectedTraceSpan, setSelectedTraceSpan] = useState<any | null>(null);
+  const [selectedTraceSpan, setSelectedTraceSpan] = useState<Span | null>(null);
 
   // Chart tooltip state
   const [hoveredPoint, setHoveredPoint] = useState<{ x: number; y: number; time: string; count: number } | null>(null);
@@ -116,7 +127,7 @@ export default function Dashboard() {
       setTraceSpans(data.spans || []);
       
       // Auto-select the root cause span by default to show its exception message
-      const rootCause = data.spans?.find((s: any) => s.is_root_cause);
+      const rootCause = data.spans?.find((s: Span) => s.is_root_cause);
       if (rootCause) {
         setSelectedTraceSpan(rootCause);
       } else if (data.spans?.length > 0) {
@@ -129,9 +140,9 @@ export default function Dashboard() {
     }
   };
 
-  const buildTraceTree = (spans: any[]) => {
-    const spanMap = new Map<string, any>();
-    const roots: any[] = [];
+  const buildTraceTree = (spans: Span[]) => {
+    const spanMap = new Map<string, Span & { children: Span[] }>();
+    const roots: (Span & { children: Span[] })[] = [];
 
     // Initialize map
     for (const span of spans) {
@@ -141,7 +152,7 @@ export default function Dashboard() {
     // Connect parents and children
     for (const item of spanMap.values()) {
       if (item.parent_span_id && spanMap.has(item.parent_span_id)) {
-        spanMap.get(item.parent_span_id).children.push(item);
+        spanMap.get(item.parent_span_id)!.children.push(item);
       } else {
         roots.push(item);
       }
@@ -150,7 +161,7 @@ export default function Dashboard() {
     return roots;
   };
 
-  const renderTraceTree = (nodes: any[], depth = 0) => {
+  const renderTraceTree = (nodes: (Span & { children: Span[] })[], depth = 0) => {
     return nodes.map((node) => (
       <div key={node.span_id} className="tree-node-wrapper" style={{ marginLeft: depth > 0 ? `${depth * 16}px` : '0px' }}>
         <div 
@@ -171,29 +182,41 @@ export default function Dashboard() {
             )}
           </div>
         </div>
-        {node.children && node.children.length > 0 && renderTraceTree(node.children, depth + 1)}
+        {node.children && node.children.length > 0 && renderTraceTree(node.children as (Span & { children: Span[] })[], depth + 1)}
       </div>
     ));
   };
 
   // Poll data according to selected refresh interval
   useEffect(() => {
-    fetchData();
+    let active = true;
+    const timer = setTimeout(() => {
+      if (active) {
+        fetchData();
+      }
+    }, 0);
+
+    let interval: NodeJS.Timeout | undefined;
     if (refreshInterval > 0) {
-      const interval = setInterval(fetchData, refreshInterval);
-      return () => clearInterval(interval);
+      interval = setInterval(() => {
+        if (active) {
+          fetchData();
+        }
+      }, refreshInterval);
     }
+
+    return () => {
+      active = false;
+      clearTimeout(timer);
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
   }, [fetchData, refreshInterval]);
 
   const handleSignatureClick = (sig: Signature) => {
     setSelectedSignatureId(sig.signature_id);
     fetchOccurrences(sig.signature_id);
-  };
-
-  const getTempoLink = (traceId: string) => {
-    const host = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
-    // Link directly to Grafana Explore panel with Tempo datasource query
-    return `http://${host}:3000/explore?left=%5B%22now-24h%22,%22now%22,%22Tempo%22,%7B%22query%22:%22${traceId}%22%7D%5D`;
   };
 
   const formatDate = (dateStr: string) => {
@@ -500,19 +523,18 @@ export default function Dashboard() {
           <div className="header-title">Traces Error Aggregator</div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
-            <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Auto-Refresh:</span>
+          <div className="refresh-select-container">
+            <span className="refresh-select-label">Auto-Refresh:</span>
             <select
               value={refreshInterval}
               onChange={(e) => setRefreshInterval(Number(e.target.value))}
-              className="filter-select"
-              style={{ padding: '0.35rem 0.6rem', fontSize: '0.75rem', minWidth: '85px', width: 'auto', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--card-border)', borderRadius: '6px', color: 'var(--text-primary)', outline: 'none' }}
+              className="refresh-select"
             >
-              <option value="0" style={{ background: 'var(--bg-color)' }}>Manual</option>
-              <option value="5000" style={{ background: 'var(--bg-color)' }}>5s</option>
-              <option value="10000" style={{ background: 'var(--bg-color)' }}>10s</option>
-              <option value="30000" style={{ background: 'var(--bg-color)' }}>30s</option>
-              <option value="60000" style={{ background: 'var(--bg-color)' }}>60s</option>
+              <option value="0">Manual</option>
+              <option value="5000">5s</option>
+              <option value="10000">10s</option>
+              <option value="30000">30s</option>
+              <option value="60000">60s</option>
             </select>
           </div>
           <button className="refresh-button" onClick={fetchData}>
@@ -610,7 +632,7 @@ export default function Dashboard() {
               </select>
               <select
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
+                onChange={(e) => setSortBy(e.target.value as 'last_seen' | 'first_seen' | 'count')}
                 className="filter-select"
               >
                 <option value="last_seen">Sort by Last Seen</option>
