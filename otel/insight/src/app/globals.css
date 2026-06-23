@@ -722,8 +722,8 @@ body {
   border: 1px solid var(--card-border);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
   border-radius: 16px;
-  width: 90%;
-  max-width: 1000px;
+  width: 95%;
+  max-width: 1300px;
   height: 80vh;
   display: flex;
   flex-direction: column;

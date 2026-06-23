@@ -51,6 +51,7 @@ export default function Dashboard() {
   // Pagination states
   const [loadedCount, setLoadedCount] = useState(10);
   const [copiedTraceId, setCopiedTraceId] = useState<string | null>(null);
+  const [refreshInterval, setRefreshInterval] = useState(5000);
 
   // Trace details viewer states
   const [selectedTraceId, setSelectedTraceId] = useState<string | null>(null);
@@ -175,12 +176,14 @@ export default function Dashboard() {
     ));
   };
 
-  // Poll data every 5 seconds
+  // Poll data according to selected refresh interval
   useEffect(() => {
     fetchData();
-    const interval = setInterval(fetchData, 5000);
-    return () => clearInterval(interval);
-  }, [fetchData]);
+    if (refreshInterval > 0) {
+      const interval = setInterval(fetchData, refreshInterval);
+      return () => clearInterval(interval);
+    }
+  }, [fetchData, refreshInterval]);
 
   const handleSignatureClick = (sig: Signature) => {
     setSelectedSignatureId(sig.signature_id);
@@ -496,7 +499,22 @@ export default function Dashboard() {
           <div className="header-logo">Insight</div>
           <div className="header-title">Traces Error Aggregator</div>
         </div>
-        <div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem' }}>
+            <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Auto-Refresh:</span>
+            <select
+              value={refreshInterval}
+              onChange={(e) => setRefreshInterval(Number(e.target.value))}
+              className="filter-select"
+              style={{ padding: '0.35rem 0.6rem', fontSize: '0.75rem', minWidth: '85px', width: 'auto', background: 'rgba(255, 255, 255, 0.05)', border: '1px solid var(--card-border)', borderRadius: '6px', color: 'var(--text-primary)', outline: 'none' }}
+            >
+              <option value="0" style={{ background: 'var(--bg-color)' }}>Manual</option>
+              <option value="5000" style={{ background: 'var(--bg-color)' }}>5s</option>
+              <option value="10000" style={{ background: 'var(--bg-color)' }}>10s</option>
+              <option value="30000" style={{ background: 'var(--bg-color)' }}>30s</option>
+              <option value="60000" style={{ background: 'var(--bg-color)' }}>60s</option>
+            </select>
+          </div>
           <button className="refresh-button" onClick={fetchData}>
             Sync Data
           </button>
